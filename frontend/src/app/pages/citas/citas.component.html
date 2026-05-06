@@ -1,0 +1,263 @@
+<div class="page-container">
+  <div class="container">
+
+    <!-- ============================================================
+         Header
+         ============================================================ -->
+    <div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div>
+        <h1 class="page-title">
+          <i class="bi bi-calendar-check-fill" style="color: var(--warning);"></i>
+          Gestión de Citas
+        </h1>
+        <p class="page-subtitle">Reserve y administre las citas de la clínica</p>
+      </div>
+      @if (!showForm()) {
+        <button class="btn btn-premium btn-premium-primary" (click)="abrirFormulario()">
+          <i class="bi bi-calendar-plus"></i> Nueva Cita
+        </button>
+      }
+    </div>
+
+    <!-- ============================================================
+         Formulario de Reserva
+         ============================================================ -->
+    @if (showForm()) {
+      <div class="card-premium mb-4">
+        <div class="card-header" style="background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);">
+          <i class="bi bi-calendar-plus me-2"></i>
+          Reservar Nueva Cita
+        </div>
+        <div class="card-body">
+          <form [formGroup]="citaForm">
+            <div class="row g-3">
+
+              <!-- Paciente -->
+              <div class="col-md-4">
+                <label class="form-label-premium" for="pacienteId">
+                  <i class="bi bi-person me-1"></i> Paciente *
+                </label>
+                <select id="pacienteId" class="form-control form-control-premium"
+                        formControlName="pacienteId">
+                  <option [ngValue]="null" disabled>Seleccione un paciente</option>
+                  @for (paciente of pacientes(); track paciente.id) {
+                    <option [ngValue]="paciente.id">
+                      {{ paciente.nombre }} — {{ paciente.rut }}
+                    </option>
+                  }
+                </select>
+                @if (citaForm.get('pacienteId')?.invalid && citaForm.get('pacienteId')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> Debe seleccionar un paciente
+                  </div>
+                }
+              </div>
+
+              <!-- Odontólogo -->
+              <div class="col-md-4">
+                <label class="form-label-premium" for="odontologoId">
+                  <i class="bi bi-person-badge me-1"></i> Odontólogo *
+                </label>
+                <select id="odontologoId" class="form-control form-control-premium"
+                        formControlName="odontologoId"
+                        (change)="consultarDisponibilidad()">
+                  <option [ngValue]="null" disabled>Seleccione un odontólogo</option>
+                  @for (odontologo of odontologos(); track odontologo.id) {
+                    <option [ngValue]="odontologo.id">
+                      {{ odontologo.nombre }} — {{ odontologo.especialidad }}
+                    </option>
+                  }
+                </select>
+                @if (citaForm.get('odontologoId')?.invalid && citaForm.get('odontologoId')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> Debe seleccionar un odontólogo
+                  </div>
+                }
+              </div>
+
+              <!-- Fecha -->
+              <div class="col-md-4">
+                <label class="form-label-premium" for="fecha">
+                  <i class="bi bi-calendar-date me-1"></i> Fecha *
+                </label>
+                <input id="fecha" type="date"
+                       class="form-control form-control-premium"
+                       formControlName="fecha"
+                       [min]="fechaMinima()"
+                       (change)="consultarDisponibilidad()">
+                @if (citaForm.get('fecha')?.invalid && citaForm.get('fecha')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> La fecha es obligatoria
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- ============================================================
+                 Horas Disponibles (con @defer)
+                 ============================================================ -->
+            @if (citaForm.get('odontologoId')?.value && citaForm.get('fecha')?.value) {
+              <div class="mt-4">
+                <label class="form-label-premium mb-3">
+                  <i class="bi bi-clock me-1"></i> Horarios Disponibles (bloques de 30 min)
+                </label>
+
+                @defer (when !isLoadingHoras()) {
+
+                  @if (horasDisponibles().length > 0) {
+                    <div class="d-flex flex-wrap gap-2">
+                      @for (hora of horasDisponibles(); track hora) {
+                        <button type="button"
+                                class="time-slot"
+                                [class.selected]="horaSeleccionada() === hora"
+                                (click)="seleccionarHora(hora)">
+                          <i class="bi bi-clock me-1"></i> {{ hora }}
+                        </button>
+                      } @empty {
+                        <div class="text-center w-100 p-3" style="color: var(--neutral-500);">
+                          <i class="bi bi-calendar-x" style="font-size: 2rem;"></i>
+                          <p class="mt-1 mb-0">No hay horarios disponibles para esta fecha</p>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <div class="text-center p-3" style="color: var(--neutral-500);">
+                      <i class="bi bi-calendar-x" style="font-size: 2rem;"></i>
+                      <p class="mt-1 mb-0">No hay horarios disponibles para esta fecha</p>
+                    </div>
+                  }
+
+                } @placeholder {
+                  <div class="text-center p-3" style="color: var(--neutral-400);">
+                    <i class="bi bi-clock-history" style="font-size: 1.5rem;"></i>
+                    <p class="mt-1 mb-0" style="font-size: var(--font-size-sm);">
+                      Seleccione odontólogo y fecha para ver disponibilidad
+                    </p>
+                  </div>
+                } @loading (minimum 300ms) {
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (i of [1,2,3,4,5,6,7,8]; track i) {
+                      <div class="skeleton" style="width: 100px; height: 40px; border-radius: var(--radius-md);"></div>
+                    }
+                  </div>
+                }
+
+                @if (horaSeleccionada()) {
+                  <div class="mt-3 p-3" style="background: var(--success-light); border-radius: var(--radius-md); border: 1px solid var(--success);">
+                    <i class="bi bi-check-circle-fill me-1" style="color: var(--success);"></i>
+                    <strong>Hora seleccionada:</strong> {{ horaSeleccionada() }}
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Botones -->
+            <div class="d-flex gap-2 mt-4">
+              <button type="button" class="btn btn-premium btn-premium-success"
+                      [disabled]="!puedeReservar()"
+                      (click)="reservar()">
+                @if (isSaving()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span> Reservando...
+                } @else {
+                  <i class="bi bi-calendar-check me-1"></i> Confirmar Reserva
+                }
+              </button>
+              <button type="button" class="btn btn-premium btn-premium-outline" (click)="cerrarFormulario()">
+                <i class="bi bi-x-lg me-1"></i> Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ============================================================
+         Lista de Citas (con @defer)
+         ============================================================ -->
+    <div class="card-premium">
+      <div class="card-body p-0">
+        @defer (when !isLoading()) {
+          @if (citas().length === 0) {
+            <div class="text-center p-5">
+              <i class="bi bi-calendar2-x" style="font-size: 3rem; color: var(--neutral-300);"></i>
+              <p class="mt-2" style="color: var(--neutral-500);">No hay citas registradas</p>
+              <button class="btn btn-premium btn-premium-primary btn-sm" (click)="abrirFormulario()">
+                <i class="bi bi-plus-lg me-1"></i> Agendar Primera Cita
+              </button>
+            </div>
+          } @else {
+            <div class="table-responsive">
+              <table class="table-premium">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Paciente</th>
+                    <th>Odontólogo</th>
+                    <th>Especialidad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (cita of citas(); track cita.id) {
+                    <tr>
+                      <td><strong>#{{ cita.id }}</strong></td>
+                      <td>
+                        <i class="bi bi-calendar3 me-1" style="color: var(--primary);"></i>
+                        {{ cita.fecha }}
+                      </td>
+                      <td>
+                        <i class="bi bi-clock me-1" style="color: var(--accent);"></i>
+                        {{ cita.hora }}
+                      </td>
+                      <td>{{ cita.pacienteNombre }}</td>
+                      <td>{{ cita.odontologoNombre }}</td>
+                      <td>
+                        <span style="background: var(--primary-light); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: var(--font-size-xs); font-weight: 600;">
+                          {{ cita.odontologoEspecialidad }}
+                        </span>
+                      </td>
+                      <td>
+                        @if (cita.activo) {
+                          <span class="badge-premium badge-activo">
+                            <i class="bi bi-check-circle-fill"></i> Activa
+                          </span>
+                        } @else {
+                          <span class="badge-premium badge-inactivo">
+                            <i class="bi bi-x-circle-fill"></i> Cancelada
+                          </span>
+                        }
+                      </td>
+                      <td>
+                        @if (cita.activo) {
+                          <button class="btn btn-sm btn-premium btn-premium-danger"
+                                  (click)="cancelarCita(cita)" title="Cancelar Cita">
+                            <i class="bi bi-calendar-x"></i>
+                          </button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        } @placeholder {
+          <div class="text-center p-4" style="color: var(--neutral-400);">
+            <i class="bi bi-hourglass-split" style="font-size: 1.5rem;"></i>
+            <p class="mt-1 mb-0">Preparando lista de citas...</p>
+          </div>
+        } @loading (minimum 400ms) {
+          <div class="p-4">
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <div class="skeleton skeleton-line mb-3"></div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

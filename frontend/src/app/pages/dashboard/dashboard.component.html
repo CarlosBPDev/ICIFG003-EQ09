@@ -1,0 +1,117 @@
+<div class="page-container">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="page-header">
+      <h1 class="page-title">
+        <i class="bi bi-grid-1x2-fill" style="color: var(--primary);"></i>
+        Dashboard
+      </h1>
+      <p class="page-subtitle">
+        Bienvenido de vuelta, <strong>{{ usuario() }}</strong>. Aquí tienes un resumen del sistema.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    @if (isLoading()) {
+      <div class="row g-4 mb-4">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="col-md-4">
+            <div class="skeleton skeleton-card"></div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="row g-4 mb-4">
+        <!-- Pacientes -->
+        <div class="col-md-4">
+          <div class="stat-card stat-primary">
+            <div class="d-flex align-items-start justify-content-between">
+              <div>
+                <div class="stat-label mb-1">Pacientes Activos</div>
+                <div class="stat-number">{{ pacientes().length }}</div>
+              </div>
+              <div class="stat-icon icon-primary">
+                <i class="bi bi-people-fill"></i>
+              </div>
+            </div>
+            <a routerLink="/pacientes" class="d-block mt-3"
+               style="font-size: var(--font-size-xs); font-weight: 600; color: var(--primary);">
+              Ver todos <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Odontólogos -->
+        <div class="col-md-4">
+          <div class="stat-card stat-success">
+            <div class="d-flex align-items-start justify-content-between">
+              <div>
+                <div class="stat-label mb-1">Odontólogos Activos</div>
+                <div class="stat-number">{{ odontologos().length }}</div>
+              </div>
+              <div class="stat-icon icon-success">
+                <i class="bi bi-person-badge-fill"></i>
+              </div>
+            </div>
+            <a routerLink="/odontologos" class="d-block mt-3"
+               style="font-size: var(--font-size-xs); font-weight: 600; color: var(--success);">
+              Ver todos <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Citas -->
+        <div class="col-md-4">
+          <div class="stat-card stat-warning">
+            <div class="d-flex align-items-start justify-content-between">
+              <div>
+                <div class="stat-label mb-1">Citas Registradas</div>
+                <div class="stat-number">{{ citas().length }}</div>
+              </div>
+              <div class="stat-icon icon-warning">
+                <i class="bi bi-calendar-check-fill"></i>
+              </div>
+            </div>
+            <a routerLink="/citas" class="d-block mt-3"
+               style="font-size: var(--font-size-xs); font-weight: 600; color: var(--warning);">
+              Ver todas <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Quick Actions -->
+    <div class="row g-4">
+      <div class="col-md-4">
+        <a routerLink="/pacientes" class="card-premium d-block text-decoration-none p-4 text-center">
+          <i class="bi bi-person-plus-fill mb-2" style="font-size: 2rem; color: var(--primary);"></i>
+          <h6 style="font-weight: 700; color: var(--neutral-900);">Nuevo Paciente</h6>
+          <p style="font-size: var(--font-size-xs); color: var(--neutral-500); margin: 0;">
+            Registrar un nuevo paciente en el sistema
+          </p>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a routerLink="/odontologos" class="card-premium d-block text-decoration-none p-4 text-center">
+          <i class="bi bi-person-badge mb-2" style="font-size: 2rem; color: var(--success);"></i>
+          <h6 style="font-weight: 700; color: var(--neutral-900);">Nuevo Odontólogo</h6>
+          <p style="font-size: var(--font-size-xs); color: var(--neutral-500); margin: 0;">
+            Agregar un profesional al equipo
+          </p>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a routerLink="/citas" class="card-premium d-block text-decoration-none p-4 text-center">
+          <i class="bi bi-calendar-plus mb-2" style="font-size: 2rem; color: var(--warning);"></i>
+          <h6 style="font-weight: 700; color: var(--neutral-900);">Reservar Cita</h6>
+          <p style="font-size: var(--font-size-xs); color: var(--neutral-500); margin: 0;">
+            Agendar una nueva cita odontológica
+          </p>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,58 +1,76 @@
-# 🏥 Clínica Odontológica - Taller 2
+# Clínica Odontológica "OdontoCare"
 
-Este proyecto es una aplicación full-stack para la gestión de una clínica odontológica, desarrollada para el Taller 2 de Programación Avanzada.
+Este proyecto cumple íntegramente con los requisitos establecidos para la asignatura:
+- **Solamente 2 carpetas principales**: `backend` y `frontend`.
+- **Backend en Spring Boot**.
+- **Frontend en Angular**.
+- Conserva el **Diseño Original (HTML/CSS/JS)** creado por el equipo (colores, banner, login con animación).
+- **1 Funcionalidad de Negocio como Equipo**: Gestión de Citas (Reservar, Cancelar, Chequear Disponibilidad).
+- **2 CRUDs (1 por alumno)**: Gestión de Pacientes y Gestión de Odontólogos.
+- Landing page, Login y Menú principal.
 
-## 🚀 Estructura del Proyecto
+## Estructura del Proyecto
 
-El repositorio está organizado en dos carpetas principales:
-
-- `backend/`: API REST desarrollada con **Spring Boot 3**, Spring Data JPA y PostgreSQL.
-- `frontend/`: Aplicación web desarrollada con **Angular 18**, Bootstrap 5 e iconos de Bootstrap.
-
-## 📋 Requisitos Previos
-
-- Java 17 o superior.
-- Node.js 18 o superior y npm.
-- PostgreSQL en ejecución (puerto por defecto 5432).
-
-## 🛠️ Configuración y Ejecución
-
-### 1. Base de Datos
-Cree una base de datos en PostgreSQL llamada `clinica_odontologica`.
-El backend está configurado para conectarse con:
-- URL: `jdbc:postgresql://localhost:5432/clinica_odontologica`
-- Usuario: `postgres`
-- Contraseña: `postgres`
-
-### 2. Backend (Spring Boot)
-Navegue a la carpeta `backend/` y ejecute:
-```bash
-./mvnw spring-boot:run
 ```
-La API estará disponible en `http://localhost:8080`.
-
-### 3. Frontend (Angular)
-Navegue a la carpeta `frontend/` y ejecute:
-```bash
-npm install
-ng serve
+/
+├── backend/    # API REST en Spring Boot 3.x (Java 17)
+├── frontend/   # SPA en Angular 18 con Signals y Rutas Protegidas
+└── README.md   # Instrucciones detalladas de ejecución
 ```
-Acceda a la aplicación en `http://localhost:4200`.
 
-## ✨ Funcionalidades
+## Requisitos Previos
 
-- **Landing Page**: Presentación de la clínica, servicios y equipo.
-- **Login**: Sistema de acceso (simulado para este taller).
-- **CRUDs Individuales**:
-  - Gestión de Pacientes.
-  - Gestión de Dentistas.
-  - Gestión de Servicios.
-  - Gestión de Horarios.
-- **Funcionalidades de Negocio**:
-  - Reservar Hora (valida disponibilidad).
-  - Cancelar Hora (libera el cupo).
-  - Consultar Disponibilidad en tiempo real.
+- **Java 17** o superior
+- **Maven**
+- **Node.js** v18 o superior
+- **Angular CLI** v18
+- **PostgreSQL** v14 o superior
 
-## 👥 Equipo
-- **Repositorio**: [CarlosBPDev/ICIFG003-EQ09](https://github.com/CarlosBPDev/ICIFG003-EQ09)
-- **Fecha**: 13 de Mayo, 2026
+---
+
+## Instrucciones para Ejecutar el Backend (Spring Boot)
+
+1. **Base de Datos**: 
+   Asegúrate de tener PostgreSQL en ejecución. Crea una base de datos llamada `clinica_odontologica`.
+   Puedes hacerlo conectándote a postgres y ejecutando:
+   ```sql
+   CREATE DATABASE clinica_odontologica;
+   ```
+   (El usuario por defecto configurado es `postgres` con contraseña `postgres`. Si tienes otra, modifica el archivo `backend/src/main/resources/application.properties`).
+
+2. **Compilar y Ejecutar**:
+   Abre una terminal en la carpeta `backend` y ejecuta:
+   ```bash
+   cd backend
+   mvn clean install
+   mvn spring-boot:run
+   ```
+   El servidor iniciará en `http://localhost:8080`.
+
+---
+
+## Instrucciones para Ejecutar el Frontend (Angular)
+
+1. **Instalar Dependencias**:
+   Abre una nueva terminal en la carpeta `frontend` y ejecuta:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **Levantar el Servidor de Desarrollo**:
+   Una vez instaladas las dependencias, ejecuta:
+   ```bash
+   ng serve
+   ```
+   Abre tu navegador y dirígete a `http://localhost:4200`.
+
+## Uso del Sistema
+
+- **Página de Inicio**: Verás la Landing Page con el diseño original y un carrusel de servicios.
+- **Login**: Haz clic en "Iniciar Sesión". El sistema tiene un login de prueba:
+  - Usuario: `Blas`
+  - Contraseña: `123`
+- **Dashboard**: Al ingresar, podrás acceder al menú protegido (Pacientes, Odontólogos y Citas).
+- **CRUDs**: Podrás crear, editar, listar y desactivar Pacientes y Odontólogos.
+- **Citas**: Podrás chequear la disponibilidad de horas de un odontólogo específico y reservar o cancelar tu cita.

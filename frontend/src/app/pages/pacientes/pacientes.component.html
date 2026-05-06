@@ -1,0 +1,157 @@
+<div class="page-container">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div>
+        <h1 class="page-title">
+          <i class="bi bi-people-fill" style="color: var(--primary);"></i>
+          Gestión de Pacientes
+        </h1>
+        <p class="page-subtitle">Administre los pacientes registrados en la clínica</p>
+      </div>
+      @if (!showForm()) {
+        <button class="btn btn-premium btn-premium-primary" (click)="abrirFormulario()">
+          <i class="bi bi-plus-lg"></i> Nuevo Paciente
+        </button>
+      }
+    </div>
+
+    <!-- Formulario -->
+    @if (showForm()) {
+      <div class="card-premium mb-4">
+        <div class="card-header">
+          <i class="bi bi-pencil-square me-2"></i>
+          {{ editingId() ? 'Editar Paciente' : 'Nuevo Paciente' }}
+        </div>
+        <div class="card-body">
+          <form [formGroup]="pacienteForm" (ngSubmit)="guardar()">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label-premium" for="nombre">Nombre Completo *</label>
+                <input id="nombre" type="text" class="form-control form-control-premium"
+                       formControlName="nombre" placeholder="Ej: Juan Pérez Silva">
+                @if (pacienteForm.get('nombre')?.invalid && pacienteForm.get('nombre')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El nombre es obligatorio (2-100 caracteres)
+                  </div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-premium" for="rut">RUT *</label>
+                <input id="rut" type="text" class="form-control form-control-premium"
+                       formControlName="rut" placeholder="Ej: 12345678-9">
+                @if (pacienteForm.get('rut')?.invalid && pacienteForm.get('rut')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El RUT es obligatorio (7-12 caracteres)
+                  </div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-premium" for="email">Email *</label>
+                <input id="email" type="email" class="form-control form-control-premium"
+                       formControlName="email" placeholder="Ej: juan@email.com">
+                @if (pacienteForm.get('email')?.invalid && pacienteForm.get('email')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> Ingrese un email válido
+                  </div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-premium" for="telefono">Teléfono</label>
+                <input id="telefono" type="text" class="form-control form-control-premium"
+                       formControlName="telefono" placeholder="Ej: +56 9 1234 5678">
+              </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-premium btn-premium-success" [disabled]="isSaving()">
+                @if (isSaving()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span> Guardando...
+                } @else {
+                  <i class="bi bi-check-lg me-1"></i> {{ editingId() ? 'Actualizar' : 'Guardar' }}
+                }
+              </button>
+              <button type="button" class="btn btn-premium btn-premium-outline" (click)="cerrarFormulario()">
+                <i class="bi bi-x-lg me-1"></i> Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- Tabla -->
+    <div class="card-premium">
+      <div class="card-body p-0">
+        @if (isLoading()) {
+          <div class="p-4">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="skeleton skeleton-line mb-3"></div>
+            }
+          </div>
+        } @else if (pacientes().length === 0) {
+          <div class="text-center p-5">
+            <i class="bi bi-people" style="font-size: 3rem; color: var(--neutral-300);"></i>
+            <p class="mt-2" style="color: var(--neutral-500);">No hay pacientes registrados</p>
+            <button class="btn btn-premium btn-premium-primary btn-sm" (click)="abrirFormulario()">
+              <i class="bi bi-plus-lg me-1"></i> Registrar Primer Paciente
+            </button>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>RUT</th>
+                  <th>Email</th>
+                  <th>Teléfono</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (paciente of pacientes(); track paciente.id) {
+                  <tr>
+                    <td><strong>#{{ paciente.id }}</strong></td>
+                    <td>{{ paciente.nombre }}</td>
+                    <td><code>{{ paciente.rut }}</code></td>
+                    <td>{{ paciente.email }}</td>
+                    <td>{{ paciente.telefono || '—' }}</td>
+                    <td>
+                      @if (paciente.activo) {
+                        <span class="badge-premium badge-activo">
+                          <i class="bi bi-check-circle-fill"></i> Activo
+                        </span>
+                      } @else {
+                        <span class="badge-premium badge-inactivo">
+                          <i class="bi bi-x-circle-fill"></i> Inactivo
+                        </span>
+                      }
+                    </td>
+                    <td>
+                      <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-premium btn-premium-outline"
+                                (click)="abrirFormulario(paciente)" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        @if (paciente.activo) {
+                          <button class="btn btn-sm btn-premium btn-premium-danger"
+                                  (click)="desactivar(paciente)" title="Desactivar">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,154 @@
+<div class="page-container">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div>
+        <h1 class="page-title">
+          <i class="bi bi-person-badge-fill" style="color: var(--success);"></i>
+          Gestión de Odontólogos
+        </h1>
+        <p class="page-subtitle">Administre los profesionales de la clínica</p>
+      </div>
+      @if (!showForm()) {
+        <button class="btn btn-premium btn-premium-success" (click)="abrirFormulario()">
+          <i class="bi bi-plus-lg"></i> Nuevo Odontólogo
+        </button>
+      }
+    </div>
+
+    <!-- Formulario -->
+    @if (showForm()) {
+      <div class="card-premium mb-4">
+        <div class="card-header" style="background: linear-gradient(135deg, var(--success) 0%, #059669 100%);">
+          <i class="bi bi-pencil-square me-2"></i>
+          {{ editingId() ? 'Editar Odontólogo' : 'Nuevo Odontólogo' }}
+        </div>
+        <div class="card-body">
+          <form [formGroup]="odontologoForm" (ngSubmit)="guardar()">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label-premium" for="nombre">Nombre Completo *</label>
+                <input id="nombre" type="text" class="form-control form-control-premium"
+                       formControlName="nombre" placeholder="Ej: Dra. María González">
+                @if (odontologoForm.get('nombre')?.invalid && odontologoForm.get('nombre')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El nombre es obligatorio (2-100 caracteres)
+                  </div>
+                }
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="rut">RUT *</label>
+                <input id="rut" type="text" class="form-control form-control-premium"
+                       formControlName="rut" placeholder="Ej: 12345678-9">
+                @if (odontologoForm.get('rut')?.invalid && odontologoForm.get('rut')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El RUT es obligatorio (7-12 caracteres)
+                  </div>
+                }
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="especialidad">Especialidad *</label>
+                <input id="especialidad" type="text" class="form-control form-control-premium"
+                       formControlName="especialidad" placeholder="Ej: Ortodoncia">
+                @if (odontologoForm.get('especialidad')?.invalid && odontologoForm.get('especialidad')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> La especialidad es obligatoria
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-premium btn-premium-success" [disabled]="isSaving()">
+                @if (isSaving()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span> Guardando...
+                } @else {
+                  <i class="bi bi-check-lg me-1"></i> {{ editingId() ? 'Actualizar' : 'Guardar' }}
+                }
+              </button>
+              <button type="button" class="btn btn-premium btn-premium-outline" (click)="cerrarFormulario()">
+                <i class="bi bi-x-lg me-1"></i> Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- Tabla -->
+    <div class="card-premium">
+      <div class="card-body p-0">
+        @if (isLoading()) {
+          <div class="p-4">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="skeleton skeleton-line mb-3"></div>
+            }
+          </div>
+        } @else if (odontologos().length === 0) {
+          <div class="text-center p-5">
+            <i class="bi bi-person-badge" style="font-size: 3rem; color: var(--neutral-300);"></i>
+            <p class="mt-2" style="color: var(--neutral-500);">No hay odontólogos registrados</p>
+            <button class="btn btn-premium btn-premium-success btn-sm" (click)="abrirFormulario()">
+              <i class="bi bi-plus-lg me-1"></i> Registrar Primer Odontólogo
+            </button>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>RUT</th>
+                  <th>Especialidad</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (odontologo of odontologos(); track odontologo.id) {
+                  <tr>
+                    <td><strong>#{{ odontologo.id }}</strong></td>
+                    <td>{{ odontologo.nombre }}</td>
+                    <td><code>{{ odontologo.rut }}</code></td>
+                    <td>
+                      <span style="background: var(--primary-light); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: var(--font-size-xs); font-weight: 600;">
+                        {{ odontologo.especialidad }}
+                      </span>
+                    </td>
+                    <td>
+                      @if (odontologo.activo) {
+                        <span class="badge-premium badge-activo">
+                          <i class="bi bi-check-circle-fill"></i> Activo
+                        </span>
+                      } @else {
+                        <span class="badge-premium badge-inactivo">
+                          <i class="bi bi-x-circle-fill"></i> Inactivo
+                        </span>
+                      }
+                    </td>
+                    <td>
+                      <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-premium btn-premium-outline"
+                                (click)="abrirFormulario(odontologo)" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        @if (odontologo.activo) {
+                          <button class="btn btn-sm btn-premium btn-premium-danger"
+                                  (click)="desactivar(odontologo)" title="Desactivar">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

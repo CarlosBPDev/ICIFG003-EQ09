@@ -1,0 +1,61 @@
+<!-- =====================
+     ENCABEZADO DE PÁGINA (Global)
+===================== -->
+<header>
+    <div class="logo">
+        <img src="assets/img/logo.png" alt="Clínica Dental Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+            <li><a routerLink="/servicios" routerLinkActive="active">Servicios</a></li>
+            <li><a routerLink="/equipo" routerLinkActive="active">Equipo</a></li>
+            <li><a routerLink="/pacientes" routerLinkActive="active">Pacientes</a></li>
+            <li><a routerLink="/odontologos" routerLinkActive="active">Odontólogos</a></li>
+            <li><a routerLink="/citas" routerLinkActive="active">Citas</a></li>
+            <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
+            @if (!isLoggedIn()) {
+              <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
+            } @else {
+              <li><a href="#" (click)="logout()">Salir</a></li>
+            }
+        </ul>
+    </nav>
+</header>
+
+<!-- ============================================================
+     Router Outlet
+     ============================================================ -->
+<router-outlet />
+
+<!-- ============================================================
+     Toast Container (Notificaciones globales — Signals)
+     ============================================================ -->
+@if (toasts().length > 0) {
+  <div class="toast-container">
+    @for (toast of toasts(); track toast.id) {
+      <div class="toast-item" [class]="'toast-' + toast.type">
+        <i class="toast-icon" [class]="getToastIcon(toast.type)"
+           [style.color]="getToastColor(toast.type)"></i>
+        <div class="toast-body">
+          <div class="toast-title">{{ toast.title }}</div>
+          <div class="toast-message">{{ toast.message }}</div>
+        </div>
+        <button class="btn-close btn-close-sm" (click)="dismissToast(toast.id)"
+                style="font-size: 0.65rem;"></button>
+      </div>
+    }
+  </div>
+}
+
+<!-- =====================
+     PIE DE PÁGINA (Global)
+===================== -->
+<footer>
+    <p>&copy; 2025 Clínica Dental. Todos los derechos reservados.</p>
+    <!-- Redes sociales -->
+    <div class="redes-sociales">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+    </div>
+</footer>

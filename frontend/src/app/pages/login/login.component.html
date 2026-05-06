@@ -1,0 +1,51 @@
+<div class="pantalla-inicial">
+    <div class="expansor-azul"></div>
+    
+    <div class="contenedor-logo">
+        <img src="assets/img/Logo.png" alt="Logo Clínica Dental" class="logo-clinica">
+    </div>
+</div>
+
+<div class="contenedor-login">
+    <div class="tarjeta-login">
+        <div class="encabezado-login">
+            <h2>¡Bienvenido!</h2>
+        </div>
+        
+        <form class="formulario-login" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            
+            <div class="grupo-entrada">
+                <input type="text" id="nombreUsuario" formControlName="usuario" required> 
+                <label for="nombreUsuario"><i class="fas fa-user"></i> Usuario</label>
+            </div>
+            
+            <div class="grupo-entrada">
+                <input type="password" id="contrasena" formControlName="password" required>
+                <label for="contrasena"><i class="fas fa-lock"></i> Contraseña</label>
+            </div>
+            
+            <div class="opciones-login">
+                <label class="recordarme cntr">
+                    <input type="checkbox" id="cbx-recordar" class="hidden-xs-up"> 
+                    <div class="cbx"></div>
+                    <span class="lbl">Recordarme</span>
+                </label>
+                <a href="#" class="olvide-contrasena">¿Olvidaste la contraseña?</a>
+            </div>
+
+            @if (loginForm.invalid && loginForm.touched) {
+              <div class="mensaje-error">Por favor, ingrese credenciales válidas</div>
+            }
+
+            <button type="submit" class="boton-acceso" [disabled]="isLoading()">
+              @if (isLoading()) {
+                Ingresando...
+              } @else {
+                Acceder
+              }
+            </button>
+
+            <button type="button" class="boton-invitado" routerLink="/">Volver al Inicio</button>
+        </form>
+    </div>
+</div>
