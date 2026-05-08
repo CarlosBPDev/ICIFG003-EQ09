@@ -38,100 +38,111 @@ psql --version
 
 ---
 
-## 🚀 INICIO RÁPIDO: Desde 0 hasta Ejecutando
+## 🚀 INICIO RÁPIDO: 4 Pasos para Arrancar
 
-### Paso 0️⃣: Clonar el Repositorio
+> ⏱️ **Tiempo total: ~5-10 minutos** (depende de descargas)
 
+---
+
+### ✅ Paso 1: Clonar / Descargar el Proyecto
+
+**Opción A: Git (Recomendado)**
 ```bash
-# Clonar el proyecto
 git clone https://github.com/tu-usuario/ICIFG003-EQ09.git
-
-# Entrar en la carpeta del proyecto
 cd ICIFG003-EQ09
 ```
 
-> Si es la primera vez, también puedes descargar el ZIP directamente desde GitHub.
+**Opción B: Descargar ZIP**
+- Ir a GitHub → Code → Download ZIP
+- Extraer en tu carpeta
 
 ---
 
-### Paso 1️⃣: Configurar la Base de Datos PostgreSQL
+### ✅ Paso 2: Configurar Base de Datos (Una sola vez)
 
-#### Opción A: Usando pgAdmin (GUI - Recomendado)
+#### 🔷 **Con pgAdmin** (Más fácil)
+1. Abre **pgAdmin** (buscalo en Inicio/Aplicaciones)
+2. `Botón derecho en Databases` → `Create` → `Database`
+3. Nombre: **`clinica_odontologica`**
+4. Click en `Save`
 
-1. Abre **pgAdmin** (incluido con PostgreSQL)
-2. Haz clic derecho en **Databases** → **Create** → **Database**
-3. Escribe el nombre: `clinica_odontologica`
-4. Haz clic en **Save**
-
-#### Opción B: Usando Terminal/CMD
-
+#### 🔷 **O con Terminal**
 ```bash
-# Conectar a PostgreSQL (ingresa tu contraseña)
 psql -U postgres
-
-# Crear la base de datos
 CREATE DATABASE clinica_odontologica;
-
-# Salir
 \q
 ```
 
-#### ⚙️ Configurar Credenciales (si son diferentes)
+**⚠️ Si tus credenciales de PostgreSQL NO son `postgres:postgres`:**
 
-Si tu usuario PostgreSQL o contraseña es diferente a `postgres:postgres`, edita:
+Edita este archivo:
+```
+backend/src/main/resources/application.properties
+```
 
-📄 **`backend/src/main/resources/application.properties`**
-
+Cambia estas líneas:
 ```properties
-# Actualiza estos valores
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
-spring.datasource.url=jdbc:postgresql://localhost:5432/clinica_odontologica
+spring.datasource.username=TU_USUARIO
+spring.datasource.password=TU_CONTRASEÑA
 ```
 
 ---
 
-### Paso 2️⃣: Ejecutar el Backend (Terminal 1)
+### ✅ Paso 3: Ejecutar el Backend
+
+Abre una **terminal en `backend/`** y ejecuta:
 
 ```bash
-# Navegar a la carpeta backend
-cd backend
+# Windows
+mvnw.cmd clean install
+mvnw.cmd spring-boot:run
 
-# Compilar e instalar dependencias
-mvn clean install
-
-# Ejecutar la aplicación
-mvn spring-boot:run
+# Mac/Linux
+./mvnw clean install
+./mvnw spring-boot:run
 ```
 
-**Esperado:**
+**Si funciona verás:**
 ```
-✅ Backend iniciado en: http://localhost:8080
+✅ Tomcat started on port(s): 8080
+✅ http://localhost:8080
 ```
 
-> Si ves errores de conexión BD, verifica que PostgreSQL esté corriendo y que los datos de conexión en `application.properties` sean correctos.
+**❌ Si falla:**
+- ✓ PostgreSQL está corriendo?
+- ✓ Base de datos `clinica_odontologica` existe?
+- ✓ Credenciales correctas en `application.properties`?
 
 ---
 
-### Paso 3️⃣: Ejecutar el Frontend (Terminal 2 - Nueva)
+### ✅ Paso 4: Ejecutar el Frontend
+
+Abre una **NUEVA terminal en `frontend/`** y ejecuta:
 
 ```bash
-# Navegar a la carpeta frontend (desde raíz del proyecto)
-cd frontend
-
-# Instalar dependencias npm
 npm install
-
-# Iniciar servidor de desarrollo
 ng serve
 ```
 
-**Esperado:**
+**Si funciona verás:**
 ```
-✅ Frontend listo en: http://localhost:4200
+✅ Application bundle generation complete
+✅ http://localhost:4200
 ```
 
-> Abre tu navegador en `http://localhost:4200` automáticamente (o hazlo manualmente)
+Abre automáticamente en navegador o ve a: **http://localhost:4200**
+
+---
+
+### 🎯 Login para Probar
+
+Credenciales por defecto:
+```
+Usuario: Blas
+Contraseña: 123
+```
+
+**¡Listo! 🎉 El proyecto está corriendo.**
 
 ---
 
