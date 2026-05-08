@@ -1,12 +1,13 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NotificationService } from '../../../core/services/notification.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['../../../../assets/css/login.css']
 })
@@ -19,49 +20,22 @@ export class LoginComponent implements OnInit {
 
   readonly loginForm: FormGroup = this.fb.group({
     usuario: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
+    recordarme: [false]
   });
 
   ngOnInit() {
-    // Ported from login.js
-    const T_EXPANSION = 800;          
-    const T_ROTACION_ENTRADA = 700;   
-    const T_ESPERA_LOGO = 800;        
-    const T_ROTACION_SALIDA = 600;
-
-    const esperar = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-    const iniciarSecuencia = async () => {
-      try {
-        const contenedorLogo = document.querySelector('.contenedor-logo');
-        const pantallaInicial = document.querySelector('.pantalla-inicial');
-        const contenedorLogin = document.querySelector('.contenedor-login');
-
-        if (!contenedorLogo || !pantallaInicial || !contenedorLogin) return;
-
-        // Ocultar login inicialmente como en el original
-        contenedorLogin.classList.add('oculto');
-
-        await esperar(T_EXPANSION); 
-        contenedorLogo.classList.add('mostrar-logo');
-        await esperar(T_ROTACION_ENTRADA + T_ESPERA_LOGO);
-        contenedorLogo.classList.remove('mostrar-logo'); 
-        contenedorLogo.classList.add('desvanecer'); 
-        await esperar(T_ROTACION_SALIDA);
-        
-        contenedorLogo.classList.add('ocultar-final'); 
-        pantallaInicial.classList.add('ocultar-fondo-blanco');
-        contenedorLogin.classList.remove('oculto'); 
-        contenedorLogin.classList.add('visible'); 
-      } catch (error) {
-        console.error("Error durante la secuencia de animación:", error);
-      }
-    };
-    
-    iniciarSecuencia();
+    // Recuperar credenciales guardadas si existen
+    const usuarioGuardado = localStorage.getItem('usuario_guardado');
+    if (usuarioGuardado) {
+      this.loginForm.patchValue({
+        usuario: usuarioGuardado,
+        recordarme: true
+      });
+    }
   }
 
-  onSubmit(): void {
+  onSubmit() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -69,19 +43,27 @@ export class LoginComponent implements OnInit {
 
     this.isLoading.set(true);
 
-    setTimeout(() => {
-      const { usuario, password } = this.loginForm.value;
+    const { usuario, password, recordarme } = this.loginForm.value;
 
-      // Login simulado original: Usuario: Blas, Contraseña: 123
-      if (usuario.toLowerCase() === 'blas' && password === '123') {
-        localStorage.setItem('clinica_usuario', usuario);
-        this.notificationService.success('Bienvenido', `Sesión iniciada como ${usuario}`);
-        this.router.navigate(['/dashboard']); // O al componente correspondiente
+    // Simulación de autenticación (en producción, llamaría a un servicio)
+    setTimeout(() => {
+      // Validar credenciales de prueba
+      if (usuario === 'Blas' && password === '123') {
+        // Guardar usuario si se seleccionó recordarme
+        if (recordarme) {
+          localStorage.setItem('usuario_guardado', usuario);
+        } else {
+          localStorage.removeItem('usuario_guardado');
+        }
+
+        this.notificationService.success(`¡Bienvenido, ${usuario}!`, 'Sesión iniciada correctamente');
+        this.router.navigate(['/dashboard']);
       } else {
-        this.notificationService.error('Error de Acceso', 'Usuario o contraseña incorrectos. Usuario: Blas | Contraseña: 123');
+        this.notificationService.error('Credenciales inválidas', 'Usuario o contraseña incorrectos. Prueba: Blas / 123');
+        this.loginForm.get('password')?.reset();
       }
 
       this.isLoading.set(false);
-    }, 600);
+    }, 1500);
   }
 }
