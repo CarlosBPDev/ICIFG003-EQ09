@@ -60,16 +60,16 @@ cd ICIFG003-EQ09
 
 ### ✅ Paso 2: Configurar Base de Datos (Una sola vez)
 
-#### 🔷 **Con pgAdmin** (Más fácil)
-1. Abre **pgAdmin** (buscalo en Inicio/Aplicaciones)
-2. `Botón derecho en Databases` → `Create` → `Database`
-3. Nombre: **`clinica_odontologica`**
-4. Click en `Save`
+Abre tu **terminal/CMD** y ejecuta:
 
-#### 🔷 **O con Terminal**
 ```bash
+# Conectar a PostgreSQL (ingresa tu contraseña)
 psql -U postgres
+
+# Crear la base de datos
 CREATE DATABASE clinica_odontologica;
+
+# Salir
 \q
 ```
 
