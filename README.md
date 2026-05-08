@@ -8,7 +8,7 @@
 
 ##  Requisitos Previos
 
-Antes de comenzar, asegúrate de tener instalado:
+Antes de comenzar, **debes tener instalado**:
 
 | Requisito | Versión | Link |
 |-----------|---------|------|
@@ -93,13 +93,8 @@ spring.datasource.password=TU_CONTRASEÑA
 Abre una **terminal en `backend/`** y ejecuta:
 
 ```bash
-# Windows
-mvnw.cmd clean install
-mvnw.cmd spring-boot:run
-
-# Mac/Linux
-./mvnw clean install
-./mvnw spring-boot:run
+mvn clean install
+mvn spring-boot:run
 ```
 
 **Si funciona verás:**
