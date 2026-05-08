@@ -6,45 +6,7 @@
 
 ---
 
-## 📋 Descripción del Proyecto
-
-Este proyecto cumple íntegramente con los requisitos establecidos para la asignatura:
-
-- ✅ **Arquitectura Modular**: 2 carpetas principales (`backend` y `frontend`)
-- ✅ **Backend REST**: Spring Boot 3.x con Java 17 + PostgreSQL
-- ✅ **Frontend Moderno**: Angular 18 con Signals y Rutas Protegidas
-- ✅ **Diseño Premium**: HTML/CSS/JS original con animaciones personalizadas
-- ✅ **Gestión de Citas**: Sistema de reservas con chequeo de disponibilidad
-- ✅ **2 CRUDs**: Pacientes y Odontólogos (CRUD completo)
-- ✅ **Autenticación**: Login con sesiones protegidas
-- ✅ **Landing Page + Dashboard**: Interfaz profesional
-
----
-
-## 🏗️ Estructura del Proyecto
-
-```
-ICIFG003-EQ09/
-├── backend/                    # 🔧 API REST Spring Boot
-│   ├── src/main/java/         # Código fuente Java
-│   ├── src/main/resources/    # Configuración (BD, properties)
-│   └── pom.xml               # Dependencias Maven
-│
-├── frontend/                   # 🎨 SPA Angular 18
-│   ├── src/app/              # Aplicación modular
-│   │   ├── core/             # Servicios, guards, interceptors
-│   │   ├── shared/           # Modelos compartidos
-│   │   ├── features/         # Módulos de funcionalidades
-│   │   └── app.config.ts     # Configuración standalone
-│   ├── package.json          # Dependencias npm
-│   └── angular.json          # Config Angular
-│
-└── README.md                  # Este archivo
-```
-
----
-
-## 📦 Requisitos Previos
+##  Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado:
 
@@ -173,7 +135,43 @@ ng serve
 
 ---
 
-## 📱 Uso del Sistema
+## � Descripción del Proyecto
+
+Este proyecto cumple íntegramente con los requisitos establecidos para la asignatura:
+
+- ✅ **Arquitectura Modular**: 2 carpetas principales (`backend` y `frontend`)
+- ✅ **Backend REST**: Spring Boot 3.x con Java 17 + PostgreSQL
+- ✅ **Frontend Moderno**: Angular 18 con Signals y Rutas Protegidas
+- ✅ **Diseño Premium**: HTML/CSS/JS original con animaciones personalizadas
+- ✅ **Gestión de Citas**: Sistema de reservas con chequeo de disponibilidad
+- ✅ **2 CRUDs**: Pacientes y Odontólogos (CRUD completo)
+- ✅ **Autenticación**: Login con sesiones protegidas
+- ✅ **Landing Page + Dashboard**: Interfaz profesional
+
+---
+
+## 🏗️ Estructura del Proyecto
+
+```
+ICIFG003-EQ09/
+├── backend/                    # 🔧 API REST Spring Boot
+│   ├── src/main/java/         # Código fuente Java
+│   ├── src/main/resources/    # Configuración (BD, properties)
+│   └── pom.xml               # Dependencias Maven
+│
+├── frontend/                   # 🎨 SPA Angular 18
+│   ├── src/app/              # Aplicación modular
+│   │   ├── core/             # Servicios, guards, interceptors
+│   │   ├── shared/           # Modelos compartidos
+│   │   ├── features/         # Módulos de funcionalidades
+│   │   └── app.config.ts     # Configuración standalone
+│   ├── package.json          # Dependencias npm
+│   └── angular.json          # Config Angular
+│
+└── README.md                  # Este archivo
+```
+
+---
 
 ### 🏠 Página de Inicio (Landing Page)
 - Vista principal con banner profesional
