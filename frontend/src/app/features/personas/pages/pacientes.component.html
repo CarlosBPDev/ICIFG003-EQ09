@@ -27,17 +27,27 @@
         <div class="card-body">
           <form [formGroup]="pacienteForm" (ngSubmit)="guardar()">
             <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label-premium" for="nombre">Nombre Completo *</label>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="nombre">Nombre *</label>
                 <input id="nombre" type="text" class="form-control form-control-premium"
-                       formControlName="nombre" placeholder="Ej: Juan Pérez Silva">
+                       formControlName="nombre" placeholder="Ej: Juan">
                 @if (pacienteForm.get('nombre')?.invalid && pacienteForm.get('nombre')?.touched) {
                   <div class="validation-error">
                     <i class="bi bi-exclamation-circle"></i> El nombre es obligatorio (2-100 caracteres)
                   </div>
                 }
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
+                <label class="form-label-premium" for="apellido">Apellido *</label>
+                <input id="apellido" type="text" class="form-control form-control-premium"
+                       formControlName="apellido" placeholder="Ej: Pérez Silva">
+                @if (pacienteForm.get('apellido')?.invalid && pacienteForm.get('apellido')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El apellido es obligatorio (2-100 caracteres)
+                  </div>
+                }
+              </div>
+              <div class="col-md-4">
                 <label class="form-label-premium" for="rut">RUT *</label>
                 <input id="rut" type="text" class="form-control form-control-premium"
                        formControlName="rut" placeholder="Ej: 12345678-9">
@@ -47,8 +57,8 @@
                   </div>
                 }
               </div>
-              <div class="col-md-6">
-                <label class="form-label-premium" for="email">Email *</label>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="email">Email</label>
                 <input id="email" type="email" class="form-control form-control-premium"
                        formControlName="email" placeholder="Ej: juan@email.com">
                 @if (pacienteForm.get('email')?.invalid && pacienteForm.get('email')?.touched) {
@@ -57,10 +67,20 @@
                   </div>
                 }
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <label class="form-label-premium" for="telefono">Teléfono</label>
                 <input id="telefono" type="text" class="form-control form-control-premium"
                        formControlName="telefono" placeholder="Ej: +56 9 1234 5678">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="fechaNacimiento">Fecha de Nacimiento</label>
+                <input id="fechaNacimiento" type="date" class="form-control form-control-premium"
+                       formControlName="fechaNacimiento">
+              </div>
+              <div class="col-md-12">
+                <label class="form-label-premium" for="direccion">Dirección</label>
+                <input id="direccion" type="text" class="form-control form-control-premium"
+                       formControlName="direccion" placeholder="Ej: Av. Principal 123, Santiago">
               </div>
             </div>
             <div class="d-flex gap-2 mt-4">
@@ -104,10 +124,10 @@
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
+                  <th>Apellido</th>
                   <th>RUT</th>
                   <th>Email</th>
                   <th>Teléfono</th>
-                  <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -116,32 +136,20 @@
                   <tr>
                     <td><strong>#{{ paciente.id }}</strong></td>
                     <td>{{ paciente.nombre }}</td>
+                    <td>{{ paciente.apellido }}</td>
                     <td><code>{{ paciente.rut }}</code></td>
-                    <td>{{ paciente.email }}</td>
+                    <td>{{ paciente.email || '—' }}</td>
                     <td>{{ paciente.telefono || '—' }}</td>
-                    <td>
-                      @if (paciente.activo) {
-                        <span class="badge-premium badge-activo">
-                          <i class="bi bi-check-circle-fill"></i> Activo
-                        </span>
-                      } @else {
-                        <span class="badge-premium badge-inactivo">
-                          <i class="bi bi-x-circle-fill"></i> Inactivo
-                        </span>
-                      }
-                    </td>
                     <td>
                       <div class="d-flex gap-1">
                         <button class="btn btn-sm btn-premium btn-premium-outline"
                                 (click)="abrirFormulario(paciente)" title="Editar">
                           <i class="bi bi-pencil"></i>
                         </button>
-                        @if (paciente.activo) {
-                          <button class="btn btn-sm btn-premium btn-premium-danger"
-                                  (click)="desactivar(paciente)" title="Desactivar">
-                            <i class="bi bi-trash"></i>
-                          </button>
-                        }
+                        <button class="btn btn-sm btn-premium btn-premium-danger"
+                                (click)="eliminar(paciente)" title="Eliminar">
+                          <i class="bi bi-trash"></i>
+                        </button>
                       </div>
                     </td>
                   </tr>

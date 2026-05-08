@@ -23,9 +23,12 @@ export class PacientesComponent implements OnInit {
 
   readonly pacienteForm: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+    apellido: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
     rut: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(12)]],
-    email: ['', [Validators.required, Validators.email]],
-    telefono: ['', [Validators.maxLength(20)]]
+    email: ['', [Validators.email]],
+    telefono: ['', [Validators.maxLength(20)]],
+    direccion: [''],
+    fechaNacimiento: ['']
   });
 
   ngOnInit(): void {
@@ -37,9 +40,12 @@ export class PacientesComponent implements OnInit {
       this.editingId.set(paciente.id);
       this.pacienteForm.patchValue({
         nombre: paciente.nombre,
+        apellido: paciente.apellido,
         rut: paciente.rut,
-        email: paciente.email,
-        telefono: paciente.telefono || ''
+        email: paciente.email || '',
+        telefono: paciente.telefono || '',
+        direccion: paciente.direccion || '',
+        fechaNacimiento: paciente.fechaNacimiento || ''
       });
     } else {
       this.editingId.set(null);
@@ -72,7 +78,7 @@ export class PacientesComponent implements OnInit {
       next: () => {
         this.notificationService.success(
           id ? 'Paciente Actualizado' : 'Paciente Creado',
-          `El paciente ${data.nombre} fue ${id ? 'actualizado' : 'registrado'} exitosamente`
+          `El paciente ${data.nombre} ${data.apellido} fue ${id ? 'actualizado' : 'registrado'} exitosamente`
         );
         this.cerrarFormulario();
         this._cargarPacientes();
@@ -84,12 +90,12 @@ export class PacientesComponent implements OnInit {
     });
   }
 
-  desactivar(paciente: PacienteResponse): void {
-    if (!confirm(`¿Está seguro de desactivar al paciente ${paciente.nombre}?`)) return;
+  eliminar(paciente: PacienteResponse): void {
+    if (!confirm(`¿Está seguro de eliminar al paciente ${paciente.nombre} ${paciente.apellido}?`)) return;
 
-    this.clinicaService.desactivarPaciente(paciente.id).subscribe({
+    this.clinicaService.eliminarPaciente(paciente.id).subscribe({
       next: () => {
-        this.notificationService.success('Paciente Desactivado', `${paciente.nombre} fue desactivado`);
+        this.notificationService.success('Paciente Eliminado', `${paciente.nombre} ${paciente.apellido} fue eliminado`);
         this._cargarPacientes();
       }
     });

@@ -28,12 +28,22 @@
           <form [formGroup]="odontologoForm" (ngSubmit)="guardar()">
             <div class="row g-3">
               <div class="col-md-4">
-                <label class="form-label-premium" for="nombre">Nombre Completo *</label>
+                <label class="form-label-premium" for="nombre">Nombre *</label>
                 <input id="nombre" type="text" class="form-control form-control-premium"
-                       formControlName="nombre" placeholder="Ej: Dra. María González">
+                       formControlName="nombre" placeholder="Ej: María">
                 @if (odontologoForm.get('nombre')?.invalid && odontologoForm.get('nombre')?.touched) {
                   <div class="validation-error">
                     <i class="bi bi-exclamation-circle"></i> El nombre es obligatorio (2-100 caracteres)
+                  </div>
+                }
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="apellido">Apellido *</label>
+                <input id="apellido" type="text" class="form-control form-control-premium"
+                       formControlName="apellido" placeholder="Ej: González Pérez">
+                @if (odontologoForm.get('apellido')?.invalid && odontologoForm.get('apellido')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El apellido es obligatorio (2-100 caracteres)
                   </div>
                 }
               </div>
@@ -56,6 +66,21 @@
                     <i class="bi bi-exclamation-circle"></i> La especialidad es obligatoria
                   </div>
                 }
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="email">Email</label>
+                <input id="email" type="email" class="form-control form-control-premium"
+                       formControlName="email" placeholder="Ej: dra.gonzalez@email.com">
+                @if (odontologoForm.get('email')?.invalid && odontologoForm.get('email')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> Ingrese un email válido
+                  </div>
+                }
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-premium" for="telefono">Teléfono</label>
+                <input id="telefono" type="text" class="form-control form-control-premium"
+                       formControlName="telefono" placeholder="Ej: +56 9 1234 5678">
               </div>
             </div>
             <div class="d-flex gap-2 mt-4">
@@ -99,9 +124,10 @@
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
+                  <th>Apellido</th>
                   <th>RUT</th>
                   <th>Especialidad</th>
-                  <th>Estado</th>
+                  <th>Email</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -110,35 +136,24 @@
                   <tr>
                     <td><strong>#{{ odontologo.id }}</strong></td>
                     <td>{{ odontologo.nombre }}</td>
+                    <td>{{ odontologo.apellido }}</td>
                     <td><code>{{ odontologo.rut }}</code></td>
                     <td>
                       <span style="background: var(--primary-light); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: var(--font-size-xs); font-weight: 600;">
                         {{ odontologo.especialidad }}
                       </span>
                     </td>
-                    <td>
-                      @if (odontologo.activo) {
-                        <span class="badge-premium badge-activo">
-                          <i class="bi bi-check-circle-fill"></i> Activo
-                        </span>
-                      } @else {
-                        <span class="badge-premium badge-inactivo">
-                          <i class="bi bi-x-circle-fill"></i> Inactivo
-                        </span>
-                      }
-                    </td>
+                    <td>{{ odontologo.email || '—' }}</td>
                     <td>
                       <div class="d-flex gap-1">
                         <button class="btn btn-sm btn-premium btn-premium-outline"
                                 (click)="abrirFormulario(odontologo)" title="Editar">
                           <i class="bi bi-pencil"></i>
                         </button>
-                        @if (odontologo.activo) {
-                          <button class="btn btn-sm btn-premium btn-premium-danger"
-                                  (click)="desactivar(odontologo)" title="Desactivar">
-                            <i class="bi bi-trash"></i>
-                          </button>
-                        }
+                        <button class="btn btn-sm btn-premium btn-premium-danger"
+                                (click)="eliminar(odontologo)" title="Eliminar">
+                          <i class="bi bi-trash"></i>
+                        </button>
                       </div>
                     </td>
                   </tr>

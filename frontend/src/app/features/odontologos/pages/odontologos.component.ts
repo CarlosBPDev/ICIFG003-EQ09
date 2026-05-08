@@ -23,8 +23,11 @@ export class OdontologosComponent implements OnInit {
 
   readonly odontologoForm: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+    apellido: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
     rut: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(12)]],
-    especialidad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]]
+    especialidad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+    email: ['', [Validators.email]],
+    telefono: ['', [Validators.maxLength(20)]]
   });
 
   ngOnInit(): void {
@@ -36,8 +39,11 @@ export class OdontologosComponent implements OnInit {
       this.editingId.set(odontologo.id);
       this.odontologoForm.patchValue({
         nombre: odontologo.nombre,
+        apellido: odontologo.apellido,
         rut: odontologo.rut,
-        especialidad: odontologo.especialidad
+        especialidad: odontologo.especialidad,
+        email: odontologo.email || '',
+        telefono: odontologo.telefono || ''
       });
     } else {
       this.editingId.set(null);
@@ -70,7 +76,7 @@ export class OdontologosComponent implements OnInit {
       next: () => {
         this.notificationService.success(
           id ? 'Odontólogo Actualizado' : 'Odontólogo Creado',
-          `El odontólogo ${data.nombre} fue ${id ? 'actualizado' : 'registrado'} exitosamente`
+          `El odontólogo ${data.nombre} ${data.apellido} fue ${id ? 'actualizado' : 'registrado'} exitosamente`
         );
         this.cerrarFormulario();
         this._cargarOdontologos();
@@ -82,12 +88,12 @@ export class OdontologosComponent implements OnInit {
     });
   }
 
-  desactivar(odontologo: OdontologoResponse): void {
-    if (!confirm(`¿Está seguro de desactivar al odontólogo ${odontologo.nombre}?`)) return;
+  eliminar(odontologo: OdontologoResponse): void {
+    if (!confirm(`¿Está seguro de eliminar al odontólogo ${odontologo.nombre} ${odontologo.apellido}?`)) return;
 
-    this.clinicaService.desactivarOdontologo(odontologo.id).subscribe({
+    this.clinicaService.eliminarOdontologo(odontologo.id).subscribe({
       next: () => {
-        this.notificationService.success('Odontólogo Desactivado', `${odontologo.nombre} fue desactivado`);
+        this.notificationService.success('Odontólogo Eliminado', `${odontologo.nombre} ${odontologo.apellido} fue eliminado`);
         this._cargarOdontologos();
       }
     });

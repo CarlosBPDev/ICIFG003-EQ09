@@ -1,117 +1,348 @@
 /* =====================
    ARCHIVO: header-footer.css
-   DESCRIPCIÓN: Estilos unificados para header y footer en todas las páginas
+   DESCRIPCIÓN: Estilos para navbar premium, header público y footer
    FECHA: 2025
 ===================== */
 
-/* ----- VARIABLES DE COLOR BASADAS EN EL LOGIN ----- */
-:root {
-    --azul-principal: #0fa49c;      /* Color azul principal del login */
-    --azul-claro: #087872;          /* Color azul claro para fondos */
-    --color-secundario: #ffca1c;    /* Color amarillo para acentos */
-    --fondo-claro: #f0f9f8;         /* Fondo claro para páginas */
-    --fondo-tarjeta: #ffffff;       /* Fondo blanco para tarjetas */
-    --color-fuente: #333333;        /* Color principal de texto */
-    --color-hover: #0d8c85;         /* Color para efectos hover */
+/* ============================================================
+   NAVBAR PRINCIPAL (Autenticado)
+   ============================================================ */
+
+.main-navbar {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
 
-/* ----- RESET Y ESTILOS BASE ----- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
+.navbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  height: 64px;
+  gap: 1rem;
 }
 
-/* ----- ESTILOS DEL HEADER ----- */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 40px;
-    background: var(--azul-principal);
-    color: #fff;
-    height: 120px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* --- Brand (Logo + Texto) --- */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
-/* Logo de la clínica */
-.logo img {
-    width: 300px;
-    height: auto;
+.navbar-logo {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 6px;
 }
 
-/* Navegación principal */
-nav ul {
-    display: flex;
-    list-style: none;
-    gap: 25px;
+.brand-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.025em;
+  background: linear-gradient(135deg, #06b6d4, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 16px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+/* --- Hamburger (móvil) --- */
+.navbar-toggler {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
 }
 
-/* Efecto hover y estado activo */
-nav a:hover,
-nav a.active {
-    background-color: var(--color-hover);
+.navbar-toggler:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* ----- ESTILOS DEL FOOTER ----- */
-footer {
-    background: var(--azul-principal);
-    color: white;
-    text-align: center;
-    padding: 25px 20px;
-    margin-top: auto;
+/* --- Links de navegación --- */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+  margin-left: 1.5rem;
 }
 
-/* Contenedor de redes sociales */
-footer .redes-sociales {
-    margin-top: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 18px;
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #94a3b8;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
 }
 
-/* Enlaces de redes sociales */
-footer .redes-sociales a {
-    text-decoration: none;
-    color: #f5f7fa;
-    font-weight: bold;
-    transition: color 0.3s;
+.nav-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
-footer .redes-sociales a:hover {
-    color: var(--color-secundario);
+.nav-item.active {
+  color: #ffffff;
+  background: rgba(37, 99, 235, 0.25);
+  box-shadow: inset 0 -2px 0 0 #2563eb;
 }
 
-/* ----- DISEÑO RESPONSIVE ----- */
+.nav-item i {
+  font-size: 1rem;
+}
+
+/* --- Separador --- */
+.nav-spacer {
+  flex: 1;
+}
+
+/* --- Usuario --- */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  color: #e2e8f0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.user-badge i {
+  font-size: 1.125rem;
+  color: #06b6d4;
+}
+
+.nav-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4375rem 0.875rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 0.5rem;
+  color: #fca5a5;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.nav-logout:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fecaca;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* ============================================================
+   HEADER PÚBLICO (Landing / Login)
+   ============================================================ */
+
+.public-header {
+  background: #0fa49c;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  height: 90px;
+}
+
+.header-brand {
+  text-decoration: none;
+}
+
+.header-logo {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  transition: background 0.2s;
+}
+
+.header-nav a:hover,
+.header-nav a.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.header-login-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-login-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ============================================================
+   MAIN CONTENT (con padding cuando hay navbar)
+   ============================================================ */
+
+main.with-navbar {
+  min-height: calc(100vh - 64px - 80px);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.main-footer {
+  background: #0f172a;
+  color: #94a3b8;
+  text-align: center;
+  padding: 1.5rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+.main-footer p {
+  margin: 0 0 0.5rem;
+}
+
+.main-footer .redes-sociales {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.main-footer .redes-sociales a {
+  text-decoration: none;
+  color: #cbd5e1;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: color 0.2s;
+}
+
+.main-footer .redes-sociales a:hover {
+  color: #06b6d4;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
 @media (max-width: 768px) {
-    /* Header en columna para móviles */
-    header {
-        flex-direction: column;
-        height: auto;
-        padding: 15px;
-        gap: 15px;
-    }
+  /* Mostrar hamburger */
+  .navbar-toggler {
+    display: flex;
+  }
 
-    /* Logo más pequeño en móviles */
-    .logo img {
-        width: 200px;
-    }
+  /* Links ocultos por defecto en móvil */
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #0f172a;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin-left: 0;
+  }
 
-    /* Menú en múltiples líneas */
-    nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-    }
+  .navbar-links.open {
+    display: flex;
+  }
+
+  .nav-item {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-spacer {
+    display: none;
+  }
+
+  .nav-user {
+    width: 100%;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-left: 0;
+  }
+
+  .main-navbar {
+    position: relative;
+  }
+
+  /* Header público responsive */
+  .header-inner {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .header-logo {
+    height: 50px;
+  }
+
+  .header-nav {
+    gap: 0.75rem;
+  }
+
+  .header-nav a {
+    font-size: 0.8125rem;
+  }
 }

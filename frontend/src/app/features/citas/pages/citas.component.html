@@ -42,7 +42,7 @@
                   <option [ngValue]="null" disabled>Seleccione un paciente</option>
                   @for (paciente of pacientes(); track paciente.id) {
                     <option [ngValue]="paciente.id">
-                      {{ paciente.nombre }} — {{ paciente.rut }}
+                      {{ paciente.nombre }} {{ paciente.apellido }} — {{ paciente.rut }}
                     </option>
                   }
                 </select>
@@ -64,7 +64,7 @@
                   <option [ngValue]="null" disabled>Seleccione un odontólogo</option>
                   @for (odontologo of odontologos(); track odontologo.id) {
                     <option [ngValue]="odontologo.id">
-                      {{ odontologo.nombre }} — {{ odontologo.especialidad }}
+                      {{ odontologo.nombre }} {{ odontologo.apellido }} — {{ odontologo.especialidad }}
                     </option>
                   }
                 </select>
@@ -212,17 +212,21 @@
                         <i class="bi bi-clock me-1" style="color: var(--accent);"></i>
                         {{ cita.hora }}
                       </td>
-                      <td>{{ cita.pacienteNombre }}</td>
-                      <td>{{ cita.odontologoNombre }}</td>
+                      <td>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</td>
+                      <td>{{ cita.dentista.nombre }} {{ cita.dentista.apellido }}</td>
                       <td>
                         <span style="background: var(--primary-light); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: var(--font-size-xs); font-weight: 600;">
-                          {{ cita.odontologoEspecialidad }}
+                          {{ cita.dentista.especialidad }}
                         </span>
                       </td>
                       <td>
-                        @if (cita.activo) {
+                        @if (cita.estado === 'RESERVADA') {
                           <span class="badge-premium badge-activo">
-                            <i class="bi bi-check-circle-fill"></i> Activa
+                            <i class="bi bi-check-circle-fill"></i> Reservada
+                          </span>
+                        } @else if (cita.estado === 'COMPLETADA') {
+                          <span class="badge-premium" style="background: var(--primary-light); color: var(--primary);">
+                            <i class="bi bi-check-circle-fill"></i> Completada
                           </span>
                         } @else {
                           <span class="badge-premium badge-inactivo">
@@ -231,7 +235,7 @@
                         }
                       </td>
                       <td>
-                        @if (cita.activo) {
+                        @if (cita.estado === 'RESERVADA') {
                           <button class="btn btn-sm btn-premium btn-premium-danger"
                                   (click)="cancelarCita(cita)" title="Cancelar Cita">
                             <i class="bi bi-calendar-x"></i>

@@ -1,75 +1,97 @@
 /**
- * Modelos TypeScript — Tipado estricto 1:1 con los DTOs del Backend.
- * Todas las fechas llegan como strings ISO-8601 desde Jackson.
+ * Modelos TypeScript — Tipado estricto 1:1 con las Entidades JPA del Backend.
+ * El backend NO usa DTOs, devuelve las entidades directamente.
  */
 
 // ============================================================
-// Paciente
+// Paciente (Backend: Paciente.java)
+// Campos: id, rut, nombre, apellido, email, telefono, fechaNacimiento, direccion
 // ============================================================
 
 export interface PacienteRequest {
-  nombre: string;
   rut: string;
-  email: string;
+  nombre: string;
+  apellido: string;
+  email?: string;
   telefono?: string;
+  fechaNacimiento?: string;
+  direccion?: string;
 }
 
 export interface PacienteResponse {
   id: number;
-  nombre: string;
   rut: string;
-  email: string;
+  nombre: string;
+  apellido: string;
+  email: string | null;
   telefono: string | null;
-  activo: boolean;
-  fechaCreacion: string;
+  fechaNacimiento: string | null;
+  direccion: string | null;
 }
 
 // ============================================================
-// Odontólogo
+// Odontólogo / Dentista (Backend: Dentista.java)
+// Campos: id, rut, nombre, apellido, especialidad, email, telefono
 // ============================================================
 
 export interface OdontologoRequest {
-  nombre: string;
   rut: string;
+  nombre: string;
+  apellido: string;
   especialidad: string;
+  email?: string;
+  telefono?: string;
 }
 
 export interface OdontologoResponse {
   id: number;
-  nombre: string;
   rut: string;
+  nombre: string;
+  apellido: string;
   especialidad: string;
-  activo: boolean;
-  fechaCreacion: string;
+  email: string | null;
+  telefono: string | null;
 }
 
 // ============================================================
-// Cita
+// Cita (Backend: Cita.java)
+// El backend espera el objeto Cita con entidades anidadas
 // ============================================================
 
 export interface CitaRequest {
-  pacienteId: number;
-  odontologoId: number;
+  paciente: { id: number };
+  dentista: { id: number };
+  servicio: { id: number };
   fecha: string;   // ISO-8601: "2026-05-15"
-  hora: string;    // ISO-8601: "09:30"
+  hora: string;    // "09:30"
+  notas?: string;
 }
 
 export interface CitaResponse {
   id: number;
   fecha: string;
   hora: string;
-  activo: boolean;
-  fechaCreacion: string;
-  pacienteId: number;
-  pacienteNombre: string;
-  pacienteRut: string;
-  odontologoId: number;
-  odontologoNombre: string;
-  odontologoEspecialidad: string;
+  estado: 'RESERVADA' | 'CANCELADA' | 'COMPLETADA';
+  notas: string | null;
+  paciente: PacienteResponse;
+  dentista: OdontologoResponse;
+  servicio: ServicioResponse;
 }
 
 // ============================================================
-// Error Response (del @RestControllerAdvice del backend)
+// Servicio (Backend: Servicio.java)
+// ============================================================
+
+export interface ServicioResponse {
+  id: number;
+  nombre: string;
+  descripcion: string | null;
+  precio: number;
+  duracionMinutos: number;
+}
+
+// ============================================================
+// Error Response
 // ============================================================
 
 export interface ErrorResponse {
@@ -80,7 +102,7 @@ export interface ErrorResponse {
 }
 
 // ============================================================
-// Bloque de hora disponible (algoritmo dinámico)
+// Bloque de hora disponible
 // ============================================================
 
 export interface BloqueHorario {

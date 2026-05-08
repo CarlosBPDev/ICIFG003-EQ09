@@ -7,14 +7,23 @@ import {
   OdontologoRequest,
   OdontologoResponse,
   CitaRequest,
-  CitaResponse
+  CitaResponse,
+  ServicioResponse
 } from '../../shared/models/models';
 import { environment } from '../../../environments/environment';
 
 /**
  * Servicio Central de la Clínica.
- * Conecta con el backend REST /api/v1/...
- * Retorna Observables — los componentes los convierten a Signals con toSignal().
+ * Conecta con el backend REST.
+ *
+ * RUTAS DEL BACKEND:
+ *   - /api/pacientes     (GET, POST, PUT/{id}, DELETE/{id})
+ *   - /api/dentistas     (GET, POST, PUT/{id}, DELETE/{id})
+ *   - /api/servicios     (GET, POST, PUT/{id}, DELETE/{id})
+ *   - /api/citas         (GET, GET/{id}, GET/paciente/{pacienteId})
+ *   - /api/citas/reservar        (POST)
+ *   - /api/citas/{id}/cancelar   (PUT)
+ *   - /api/citas/disponibilidad  (GET ?dentistaId=X&fecha=YYYY-MM-DD)
  */
 @Injectable({ providedIn: 'root' })
 export class ClinicaService {
@@ -24,7 +33,7 @@ export class ClinicaService {
   constructor(private readonly http: HttpClient) {}
 
   // ============================================================
-  // PACIENTES
+  // PACIENTES  →  /api/pacientes
   // ============================================================
 
   getPacientes(): Observable<PacienteResponse[]> {
@@ -43,59 +52,74 @@ export class ClinicaService {
     return this.http.put<PacienteResponse>(`${this.apiUrl}/pacientes/${id}`, paciente);
   }
 
-  desactivarPaciente(id: number): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/pacientes/${id}/desactivar`, {});
+  eliminarPaciente(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/pacientes/${id}`);
   }
 
   // ============================================================
-  // ODONTÓLOGOS
+  // ODONTÓLOGOS (DENTISTAS)  →  /api/dentistas
   // ============================================================
 
   getOdontologos(): Observable<OdontologoResponse[]> {
-    return this.http.get<OdontologoResponse[]>(`${this.apiUrl}/odontologos`);
+    return this.http.get<OdontologoResponse[]>(`${this.apiUrl}/dentistas`);
   }
 
   getOdontologo(id: number): Observable<OdontologoResponse> {
-    return this.http.get<OdontologoResponse>(`${this.apiUrl}/odontologos/${id}`);
+    return this.http.get<OdontologoResponse>(`${this.apiUrl}/dentistas/${id}`);
   }
 
   crearOdontologo(odontologo: OdontologoRequest): Observable<OdontologoResponse> {
-    return this.http.post<OdontologoResponse>(`${this.apiUrl}/odontologos`, odontologo);
+    return this.http.post<OdontologoResponse>(`${this.apiUrl}/dentistas`, odontologo);
   }
 
   actualizarOdontologo(id: number, odontologo: OdontologoRequest): Observable<OdontologoResponse> {
-    return this.http.put<OdontologoResponse>(`${this.apiUrl}/odontologos/${id}`, odontologo);
+    return this.http.put<OdontologoResponse>(`${this.apiUrl}/dentistas/${id}`, odontologo);
   }
 
-  desactivarOdontologo(id: number): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/odontologos/${id}/desactivar`, {});
+  eliminarOdontologo(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/dentistas/${id}`);
   }
 
   // ============================================================
-  // CITAS
+  // SERVICIOS  →  /api/servicios
+  // ============================================================
+
+  getServicios(): Observable<ServicioResponse[]> {
+    return this.http.get<ServicioResponse[]>(`${this.apiUrl}/servicios`);
+  }
+
+  // ============================================================
+  // CITAS  →  /api/citas
   // ============================================================
 
   getCitas(): Observable<CitaResponse[]> {
     return this.http.get<CitaResponse[]>(`${this.apiUrl}/citas`);
   }
 
+  /**
+   * Reservar una cita.
+   * Backend endpoint: POST /api/citas/reservar
+   */
   crearCita(cita: CitaRequest): Observable<CitaResponse> {
-    return this.http.post<CitaResponse>(`${this.apiUrl}/citas`, cita);
-  }
-
-  cancelarCita(id: number): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/citas/${id}/cancelar`, {});
+    return this.http.post<CitaResponse>(`${this.apiUrl}/citas/reservar`, cita);
   }
 
   /**
-   * Obtiene las horas disponibles para un odontólogo en una fecha.
-   * El backend genera bloques de 30 min (09:00–17:00) y filtra los ocupados.
-   * Retorna un array de strings con las horas libres: ["09:00", "09:30", ...]
+   * Cancelar una cita.
+   * Backend endpoint: PUT /api/citas/{id}/cancelar
    */
-  getHorasDisponibles(odontologoId: number, fecha: string): Observable<string[]> {
-    return this.http.get<string[]>(
+  cancelarCita(id: number): Observable<CitaResponse> {
+    return this.http.put<CitaResponse>(`${this.apiUrl}/citas/${id}/cancelar`, {});
+  }
+
+  /**
+   * Obtiene los horarios disponibles de un dentista en una fecha.
+   * Backend endpoint: GET /api/citas/disponibilidad?dentistaId=X&fecha=YYYY-MM-DD
+   */
+  getHorasDisponibles(dentistaId: number, fecha: string): Observable<any[]> {
+    return this.http.get<any[]>(
       `${this.apiUrl}/citas/disponibilidad`,
-      { params: { odontologoId: odontologoId.toString(), fecha } }
+      { params: { dentistaId: dentistaId.toString(), fecha } }
     );
   }
 }

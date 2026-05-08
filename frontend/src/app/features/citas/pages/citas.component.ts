@@ -124,8 +124,9 @@ export class CitasComponent implements OnInit {
     this.isSaving.set(true);
 
     const request = {
-      pacienteId: this.citaForm.get('pacienteId')?.value,
-      odontologoId: this.citaForm.get('odontologoId')?.value,
+      paciente: { id: this.citaForm.get('pacienteId')?.value },
+      dentista: { id: this.citaForm.get('odontologoId')?.value },
+      servicio: { id: 1 },
       fecha: this.citaForm.get('fecha')?.value,
       hora: hora
     };
@@ -134,7 +135,7 @@ export class CitasComponent implements OnInit {
       next: (cita) => {
         this.notificationService.success(
           'Cita Reservada',
-          `Cita agendada para ${cita.fecha} a las ${cita.hora} con ${cita.odontologoNombre}`
+          `Cita agendada para ${cita.fecha} a las ${cita.hora}`
         );
         this.cerrarFormulario();
         this._cargarCitas();
@@ -147,7 +148,7 @@ export class CitasComponent implements OnInit {
   }
 
   cancelarCita(cita: CitaResponse): void {
-    if (!confirm(`¿Cancelar la cita de ${cita.pacienteNombre} el ${cita.fecha} a las ${cita.hora}?`)) return;
+    if (!confirm(`¿Cancelar la cita de ${cita.paciente.nombre} ${cita.paciente.apellido} el ${cita.fecha} a las ${cita.hora}?`)) return;
 
     this.clinicaService.cancelarCita(cita.id).subscribe({
       next: () => {
@@ -165,12 +166,12 @@ export class CitasComponent implements OnInit {
     this.isLoading.set(true);
 
     this.clinicaService.getPacientes().subscribe({
-      next: (data) => this.pacientes.set(data.filter(p => p.activo)),
+      next: (data) => this.pacientes.set(data),
       error: () => this.pacientes.set([])
     });
 
     this.clinicaService.getOdontologos().subscribe({
-      next: (data) => this.odontologos.set(data.filter(o => o.activo)),
+      next: (data) => this.odontologos.set(data),
       error: () => this.odontologos.set([])
     });
 

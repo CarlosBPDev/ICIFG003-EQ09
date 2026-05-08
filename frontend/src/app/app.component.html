@@ -1,32 +1,89 @@
 <!-- =====================
-     ENCABEZADO DE PÁGINA (Global)
+     NAVBAR PREMIUM (Solo visible cuando está logueado y NO en landing/login)
 ===================== -->
-<header>
-    <div class="logo">
-        <img src="assets/img/logo.png" alt="Clínica Dental Logo">
+@if (showNavbar()) {
+  <nav class="main-navbar">
+    <div class="navbar-inner">
+      <!-- Logo + Marca -->
+      <a routerLink="/dashboard" class="navbar-brand">
+        <img src="assets/img/logo.png" alt="OdontoCare Logo" class="navbar-logo">
+        <span class="brand-text">OdontoCare</span>
+      </a>
+
+      <!-- Hamburger para móvil -->
+      <button class="navbar-toggler" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+        <i class="bi" [class.bi-list]="!mobileMenuOpen()" [class.bi-x-lg]="mobileMenuOpen()"></i>
+      </button>
+
+      <!-- Links de navegación -->
+      <div class="navbar-links" [class.open]="mobileMenuOpen()">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+          <i class="bi bi-grid-1x2-fill"></i>
+          <span>Dashboard</span>
+        </a>
+        <a routerLink="/pacientes" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-people-fill"></i>
+          <span>Pacientes</span>
+        </a>
+        <a routerLink="/odontologos" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-person-badge-fill"></i>
+          <span>Odontólogos</span>
+        </a>
+        <a routerLink="/citas" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-calendar-check-fill"></i>
+          <span>Citas</span>
+        </a>
+
+        <!-- Separador -->
+        <div class="nav-spacer"></div>
+
+        <!-- Usuario + Cerrar sesión -->
+        <div class="nav-user">
+          <div class="user-badge">
+            <i class="bi bi-person-circle"></i>
+            <span>{{ currentUser() }}</span>
+          </div>
+          <button class="nav-logout" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Salir</span>
+          </button>
+        </div>
+      </div>
     </div>
-    <nav>
-        <ul>
-            <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
-            <li><a routerLink="/servicios" routerLinkActive="active">Servicios</a></li>
-            <li><a routerLink="/equipo" routerLinkActive="active">Equipo</a></li>
-            <li><a routerLink="/pacientes" routerLinkActive="active">Pacientes</a></li>
-            <li><a routerLink="/odontologos" routerLinkActive="active">Odontólogos</a></li>
-            <li><a routerLink="/citas" routerLinkActive="active">Citas</a></li>
-            <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
-            @if (!isLoggedIn()) {
-              <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
-            } @else {
-              <li><a href="#" (click)="logout()">Salir</a></li>
-            }
-        </ul>
-    </nav>
-</header>
+  </nav>
+}
+
+<!-- =====================
+     HEADER PÚBLICO (Solo en landing y login)
+===================== -->
+@if (!showNavbar()) {
+  <header class="public-header">
+    <div class="header-inner">
+      <a routerLink="/" class="header-brand">
+        <img src="assets/img/logo.png" alt="Clínica Dental Logo" class="header-logo">
+      </a>
+      <nav class="header-nav">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+        @if (!isLoggedIn()) {
+          <a routerLink="/login" routerLinkActive="active" class="header-login-btn">
+            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+          </a>
+        } @else {
+          <a routerLink="/dashboard" class="header-login-btn">
+            <i class="bi bi-grid-1x2-fill"></i> Dashboard
+          </a>
+        }
+      </nav>
+    </div>
+  </header>
+}
 
 <!-- ============================================================
      Router Outlet
      ============================================================ -->
-<router-outlet />
+<main [class.with-navbar]="showNavbar()">
+  <router-outlet />
+</main>
 
 <!-- ============================================================
      Toast Container (Notificaciones globales — Signals)
@@ -49,13 +106,12 @@
 }
 
 <!-- =====================
-     PIE DE PÁGINA (Global)
+     PIE DE PÁGINA
 ===================== -->
-<footer>
-    <p>&copy; 2025 Clínica Dental. Todos los derechos reservados.</p>
-    <!-- Redes sociales -->
+<footer class="main-footer">
+    <p>&copy; 2025 Clínica Dental OdontoCare. Todos los derechos reservados.</p>
     <div class="redes-sociales">
-        <a href="#">Facebook</a>
-        <a href="#">Instagram</a>
+        <a href="#"><i class="bi bi-facebook"></i> Facebook</a>
+        <a href="#"><i class="bi bi-instagram"></i> Instagram</a>
     </div>
 </footer>

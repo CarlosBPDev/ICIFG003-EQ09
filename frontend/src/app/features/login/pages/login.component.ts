@@ -48,7 +48,10 @@ export class LoginComponent implements OnInit {
     // Simulación de autenticación (en producción, llamaría a un servicio)
     setTimeout(() => {
       // Validar credenciales de prueba
-      if (usuario === 'Blas' && password === '123') {
+      if (usuario === 'admin' && password === 'admin') {
+        // Guardar sesión del usuario (requerido por el authGuard)
+        localStorage.setItem('clinica_usuario', usuario);
+
         // Guardar usuario si se seleccionó recordarme
         if (recordarme) {
           localStorage.setItem('usuario_guardado', usuario);
@@ -59,7 +62,7 @@ export class LoginComponent implements OnInit {
         this.notificationService.success(`¡Bienvenido, ${usuario}!`, 'Sesión iniciada correctamente');
         this.router.navigate(['/dashboard']);
       } else {
-        this.notificationService.error('Credenciales inválidas', 'Usuario o contraseña incorrectos. Prueba: Blas / 123');
+        this.notificationService.error('Credenciales inválidas', 'Usuario o contraseña incorrectos. Prueba: admin / admin');
         this.loginForm.get('password')?.reset();
       }
 
