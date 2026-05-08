@@ -88,6 +88,47 @@ spring.datasource.password=TU_CONTRASEÑA
 
 ---
 
+### 🗄️ Scripts de Base de Datos (Opcional)
+
+Si deseas cargar datos de prueba manualmente, abre la consola de PostgreSQL (`psql` o pgAdmin) y ejecuta:
+
+#### 1. Insertar Datos de Prueba
+```sql
+-- Insertar Pacientes
+INSERT INTO pacientes (rut, nombre, apellido, email, telefono, fecha_nacimiento, direccion) VALUES
+('11.111.111-1', 'Juan', 'Perez', 'juan.perez@email.com', '+56 9 1111 2222', '1990-05-15', 'Av. Libertad 123, Santiago'),
+('22.222.222-2', 'Maria', 'Soto', 'maria.soto@email.com', '+56 9 3333 4444', '1985-10-20', 'Calle Nueva 456, Valparaiso');
+
+-- Insertar Dentistas
+INSERT INTO dentistas (rut, nombre, apellido, especialidad, email, telefono) VALUES
+('33.333.333-3', 'Carlos', 'Gomez', 'Ortodoncia', 'carlos.gomez@odontocare.com', '+56 9 5555 6666'),
+('44.444.444-4', 'Ana', 'Rojas', 'Endodoncia', 'ana.rojas@odontocare.com', '+56 9 7777 8888');
+
+-- Insertar Servicios
+INSERT INTO servicios (nombre, descripcion, duracion_minutos, precio) VALUES
+('Limpieza Dental', 'Limpieza profunda con ultrasonido', 45, 25000),
+('Extraccion', 'Extraccion simple de pieza dental', 60, 45000),
+('Blanqueamiento', 'Tratamiento de blanqueamiento laser', 60, 120000);
+```
+
+#### 2. Crear Usuario Admin (Simulado en Frontend)
+> **Nota:** Actualmente la autenticación se maneja en el frontend. Si deseas implementar persistencia de usuarios, puedes usar este script:
+
+```sql
+CREATE TABLE IF NOT EXISTS usuarios (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) DEFAULT 'ADMIN'
+);
+
+INSERT INTO usuarios (username, password, role) 
+VALUES ('admin', 'admin', 'ADMIN')
+ON CONFLICT (username) DO NOTHING;
+```
+
+---
+
 ### ✅ Paso 3: Ejecutar el Backend
 
 Abre una **terminal en `backend/`** y ejecuta:
@@ -133,8 +174,8 @@ Abre automáticamente en navegador o ve a: **http://localhost:4200**
 
 Credenciales por defecto:
 ```
-Usuario: Blas
-Contraseña: 123
+Usuario: admin
+Contraseña: admin
 ```
 
 **¡Listo! 🎉 El proyecto está corriendo.**
@@ -188,8 +229,8 @@ ICIFG003-EQ09/
 ### 🔐 Login
 **Credenciales de Prueba:**
 ```
-Usuario: Blas
-Contraseña: 123
+Usuario: admin
+Contraseña: admin
 ```
 
 **Nota:** El sistema almacena la sesión en localStorage. Cierra sesión desde el botón en la navbar.
@@ -308,7 +349,7 @@ src/app/
 
 ## 📝 Notas Importantes
 
-1. **Credenciales de Prueba**: Usuario `Blas`, Contraseña `123`
+1. **Credenciales de Prueba**: Usuario `admin`, Contraseña `admin`
 2. **Puerto Backend**: 8080
 3. **Puerto Frontend**: 4200
 4. **BD**: `clinica_odontologica` en PostgreSQL
