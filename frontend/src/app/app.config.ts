@@ -3,7 +3,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { errorInterceptor } from './interceptors/error.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 /**
  * Configuración standalone de la aplicación Angular 18.

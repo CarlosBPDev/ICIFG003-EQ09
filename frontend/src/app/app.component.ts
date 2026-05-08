@@ -1,6 +1,6 @@
 import { Component, inject, computed } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { NotificationService, Toast } from './services/notification.service';
+import { NotificationService, Toast } from './core/services/notification.service';
 
 @Component({
   selector: 'app-root',
