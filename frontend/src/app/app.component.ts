@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { NotificationService, Toast } from './core/services/notification.service';
+import { AuthService } from './core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { filter, Subscription } from 'rxjs';
 
@@ -14,10 +15,11 @@ import { filter, Subscription } from 'rxjs';
 export class AppComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly notificationService = inject(NotificationService);
+  readonly authService = inject(AuthService);
   private routerSub!: Subscription;
 
   readonly toasts = this.notificationService.toasts;
-  readonly isLoggedIn = signal(false);
+  readonly isLoggedIn = this.authService.isLoggedIn;
   readonly currentUser = signal('');
   readonly showNavbar = signal(false);
   readonly mobileMenuOpen = signal(false);
@@ -37,21 +39,18 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private _checkAuthState(): void {
-    const user = localStorage.getItem('clinica_usuario');
-    this.isLoggedIn.set(!!user);
-    this.currentUser.set(user || '');
+    const user = this.authService.user();
+    this.currentUser.set(user?.displayName || '');
 
     const url = this.router.url;
-    const isPublicPage = url === '/' || url === '/login';
-    this.showNavbar.set(!isPublicPage && this.isLoggedIn());
+    const isPublicPage = url === '/' || url === '/login' || url === '/servicios';
+    this.showNavbar.set(!isPublicPage && this.authService.isLoggedIn());
   }
 
   logout(): void {
-    localStorage.removeItem('clinica_usuario');
-    this.isLoggedIn.set(false);
-    this.currentUser.set('');
+    this.authService.logout();
     this.showNavbar.set(false);
-    this.router.navigate(['/']);
+    this.currentUser.set('');
   }
 
   toggleMobileMenu(): void {

@@ -1,0 +1,419 @@
+<div class="page-container">
+  <div class="container">
+
+    <!-- ============================================================
+         Header del Portal
+         ============================================================ -->
+    <div class="page-header text-center mb-4">
+      <h1 class="page-title justify-content-center">
+        <i class="bi bi-house-heart-fill" style="color: var(--primary);"></i>
+        Mi Portal de Salud
+      </h1>
+      <p class="page-subtitle">
+        Bienvenido. Consulta tus odontólogos, historial médico y reserva tus citas.
+      </p>
+    </div>
+
+    <!-- ============================================================
+         Tabs de Navegación
+         ============================================================ -->
+    <div class="d-flex justify-content-center gap-2 mb-4 flex-wrap">
+      <button class="btn-premium"
+              [class.btn-premium-primary]="activeTab() === 'odontologos'"
+              [class.btn-premium-outline]="activeTab() !== 'odontologos'"
+              (click)="cambiarTab('odontologos')">
+        <i class="bi bi-person-badge-fill"></i> Odontólogos
+      </button>
+      <button class="btn-premium"
+              [class.btn-premium-primary]="activeTab() === 'historial'"
+              [class.btn-premium-outline]="activeTab() !== 'historial'"
+              (click)="cambiarTab('historial')">
+        <i class="bi bi-journal-medical"></i> Mi Historial
+      </button>
+      <button class="btn-premium"
+              [class.btn-premium-primary]="activeTab() === 'reservar'"
+              [class.btn-premium-outline]="activeTab() !== 'reservar'"
+              (click)="cambiarTab('reservar')">
+        <i class="bi bi-calendar-plus"></i> Reservar Cita
+      </button>
+      <button class="btn-premium"
+              [class.btn-premium-primary]="activeTab() === 'comentar'"
+              [class.btn-premium-outline]="activeTab() !== 'comentar'"
+              (click)="cambiarTab('comentar')">
+        <i class="bi bi-chat-heart-fill"></i> Dejar Comentario
+      </button>
+    </div>
+
+    <!-- ============================================================
+         TAB: Odontólogos Disponibles
+         ============================================================ -->
+    @if (activeTab() === 'odontologos') {
+      <div class="row g-4">
+        @if (isLoading()) {
+          @for (i of [1,2,3]; track i) {
+            <div class="col-md-4">
+              <div class="skeleton" style="height: 200px;"></div>
+            </div>
+          }
+        } @else {
+          @for (doc of odontologos(); track doc.id) {
+            <div class="col-md-4">
+              <div class="card-inicio-style h-100" style="border-top-color: var(--primary);">
+                <div class="text-center mb-3">
+                  <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem;">
+                    <i class="bi bi-person-badge-fill" style="font-size: 1.5rem; color: var(--primary);"></i>
+                  </div>
+                  <h5 style="font-weight: 700; color: var(--neutral-900); margin-bottom: 0.25rem;">
+                    Dr(a). {{ doc.nombre }} {{ doc.apellido }}
+                  </h5>
+                  <span class="badge-premium badge-activo">{{ doc.especialidad }}</span>
+                </div>
+                <div style="font-size: var(--font-size-sm); color: var(--neutral-600);">
+                  @if (doc.email) {
+                    <p class="mb-1"><i class="bi bi-envelope me-1"></i> {{ doc.email }}</p>
+                  }
+                  @if (doc.telefono) {
+                    <p class="mb-1"><i class="bi bi-phone me-1"></i> {{ doc.telefono }}</p>
+                  }
+                  <p class="mb-0"><i class="bi bi-hash me-1"></i> RUT: {{ doc.rut }}</p>
+                </div>
+                <button class="btn-premium btn-premium-primary w-100 justify-content-center mt-3"
+                        (click)="cambiarTab('reservar')">
+                  <i class="bi bi-calendar-plus"></i> Reservar con este profesional
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <div class="col-12 text-center p-5">
+              <i class="bi bi-person-x" style="font-size: 3rem; color: var(--neutral-300);"></i>
+              <p class="mt-2" style="color: var(--neutral-500);">No hay odontólogos disponibles</p>
+            </div>
+          }
+        }
+      </div>
+    }
+
+    <!-- ============================================================
+         TAB: Historial Médico + Facturación
+         ============================================================ -->
+    @if (activeTab() === 'historial') {
+      <!-- Resumen de facturación -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card-inicio-style text-center" style="border-top-color: var(--primary);">
+            <div class="stat-icon icon-primary mx-auto mb-2">
+              <i class="bi bi-calendar-check-fill"></i>
+            </div>
+            <div class="stat-number">{{ misCitas().length }}</div>
+            <div class="stat-label">Citas Totales</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-inicio-style text-center" style="border-top-color: var(--success);">
+            <div class="stat-icon icon-success mx-auto mb-2">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div class="stat-number">{{ serviciosRealizados().length }}</div>
+            <div class="stat-label">Servicios Realizados</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-inicio-style text-center" style="border-top-color: var(--warning);">
+            <div class="stat-icon icon-warning mx-auto mb-2">
+              <i class="bi bi-cash-stack"></i>
+            </div>
+            <div class="stat-number">${{ totalDeuda() | number:'1.0-0' }}</div>
+            <div class="stat-label">Total Acumulado</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Servicios Realizados -->
+      @if (serviciosRealizados().length > 0) {
+        <div class="card-premium mb-4">
+          <div class="card-header">
+            <i class="bi bi-receipt me-2"></i> Detalle de Servicios Realizados
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table-premium">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Servicio</th>
+                    <th>Odontólogo</th>
+                    <th>Precio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (s of serviciosRealizados(); track s.fecha) {
+                    <tr>
+                      <td><i class="bi bi-calendar3 me-1" style="color: var(--primary);"></i> {{ s.fecha }}</td>
+                      <td><strong>{{ s.servicio }}</strong></td>
+                      <td>{{ s.odontologo }}</td>
+                      <td style="font-weight: 700; color: var(--neutral-900);">${{ s.precio | number:'1.0-0' }}</td>
+                    </tr>
+                  }
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3" style="text-align: right; font-weight: 700;">TOTAL:</td>
+                    <td style="font-weight: 800; font-size: var(--font-size-lg); color: var(--primary);">
+                      ${{ totalDeuda() | number:'1.0-0' }}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Historial de Citas -->
+      <div class="card-premium">
+        <div class="card-header" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);">
+          <i class="bi bi-journal-medical me-2"></i> Historial de Citas
+        </div>
+        <div class="card-body p-0">
+          @if (misCitas().length === 0) {
+            <div class="text-center p-5">
+              <i class="bi bi-journal-x" style="font-size: 3rem; color: var(--neutral-300);"></i>
+              <p class="mt-2" style="color: var(--neutral-500);">No tienes citas registradas aún</p>
+              <button class="btn-premium btn-premium-primary" (click)="cambiarTab('reservar')">
+                <i class="bi bi-calendar-plus"></i> Reservar Primera Cita
+              </button>
+            </div>
+          } @else {
+            <div class="table-responsive">
+              <table class="table-premium">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Odontólogo</th>
+                    <th>Servicio</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (cita of misCitas(); track cita.id) {
+                    <tr>
+                      <td><i class="bi bi-calendar3 me-1" style="color: var(--primary);"></i> {{ cita.fecha }}</td>
+                      <td><i class="bi bi-clock me-1" style="color: var(--accent);"></i> {{ cita.hora }}</td>
+                      <td>Dr(a). {{ cita.dentista.nombre }} {{ cita.dentista.apellido }}</td>
+                      <td>{{ cita.servicio?.nombre || 'Sin definir' }}</td>
+                      <td>
+                        @if (cita.estado === 'RESERVADA') {
+                          <span class="badge-premium badge-activo">
+                            <i class="bi bi-check-circle-fill"></i> Reservada
+                          </span>
+                        } @else if (cita.estado === 'COMPLETADA') {
+                          <span class="badge-premium" style="background: var(--primary-light); color: var(--primary);">
+                            <i class="bi bi-check-circle-fill"></i> Completada
+                          </span>
+                        } @else {
+                          <span class="badge-premium badge-inactivo">
+                            <i class="bi bi-x-circle-fill"></i> Cancelada
+                          </span>
+                        }
+                      </td>
+                      <td>
+                        @if (cita.estado === 'RESERVADA') {
+                          <button class="btn btn-sm btn-premium btn-premium-danger"
+                                  (click)="cancelarMiCita(cita)" title="Cancelar Cita">
+                            <i class="bi bi-calendar-x"></i>
+                          </button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ============================================================
+         TAB: Reservar Cita
+         ============================================================ -->
+    @if (activeTab() === 'reservar') {
+      <div class="card-premium">
+        <div class="card-header" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); color: var(--neutral-900);">
+          <i class="bi bi-calendar-plus me-2"></i>
+          Reservar Nueva Cita
+        </div>
+        <div class="card-body">
+          <form [formGroup]="citaForm">
+            <div class="row g-3">
+              <!-- Odontólogo -->
+              <div class="col-md-4">
+                <label class="form-label-premium">
+                  <i class="bi bi-person-badge me-1"></i> Odontólogo *
+                </label>
+                <select class="form-control form-control-premium"
+                        formControlName="odontologoId"
+                        (change)="consultarDisponibilidad()">
+                  <option [ngValue]="null" disabled>Seleccione un profesional</option>
+                  @for (doc of odontologos(); track doc.id) {
+                    <option [ngValue]="doc.id">
+                      Dr(a). {{ doc.nombre }} {{ doc.apellido }} — {{ doc.especialidad }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Servicio -->
+              <div class="col-md-4">
+                <label class="form-label-premium">
+                  <i class="bi bi-briefcase me-1"></i> Servicio *
+                </label>
+                <select class="form-control form-control-premium"
+                        formControlName="servicioId">
+                  <option [ngValue]="null" disabled>Seleccione un servicio</option>
+                  @for (srv of servicios(); track srv.id) {
+                    <option [ngValue]="srv.id">
+                      {{ srv.nombre }} — ${{ srv.precio | number:'1.0-0' }} ({{ srv.duracionMinutos }} min)
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Fecha -->
+              <div class="col-md-4">
+                <label class="form-label-premium">
+                  <i class="bi bi-calendar-date me-1"></i> Fecha *
+                </label>
+                <input type="date"
+                       class="form-control form-control-premium"
+                       formControlName="fecha"
+                       [min]="fechaMinima()"
+                       (change)="consultarDisponibilidad()">
+              </div>
+            </div>
+
+            <!-- Horas Disponibles -->
+            @if (citaForm.get('odontologoId')?.value && citaForm.get('fecha')?.value) {
+              <div class="mt-4">
+                <label class="form-label-premium mb-3">
+                  <i class="bi bi-clock me-1"></i> Horarios Disponibles
+                </label>
+                @if (isLoadingHoras()) {
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (i of [1,2,3,4,5,6]; track i) {
+                      <div class="skeleton" style="width: 100px; height: 40px; border-radius: var(--radius-md);"></div>
+                    }
+                  </div>
+                } @else if (horasDisponibles().length > 0) {
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (hora of horasDisponibles(); track hora) {
+                      <button type="button"
+                              class="time-slot"
+                              [class.selected]="horaSeleccionada() === hora"
+                              (click)="seleccionarHora(hora)">
+                        <i class="bi bi-clock me-1"></i> {{ hora }}
+                      </button>
+                    }
+                  </div>
+                } @else {
+                  <div class="text-center p-3" style="color: var(--neutral-500);">
+                    <i class="bi bi-calendar-x" style="font-size: 2rem;"></i>
+                    <p class="mt-1 mb-0">No hay horarios disponibles para esta fecha</p>
+                  </div>
+                }
+
+                @if (horaSeleccionada()) {
+                  <div class="mt-3 p-3" style="background: var(--success-light); border-radius: var(--radius-md); border: 1px solid var(--success);">
+                    <i class="bi bi-check-circle-fill me-1" style="color: var(--success);"></i>
+                    <strong>Hora seleccionada:</strong> {{ horaSeleccionada() }}
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Botones -->
+            <div class="d-flex gap-2 mt-4">
+              <button type="button" class="btn btn-premium btn-premium-success"
+                      [disabled]="citaForm.invalid || !horaSeleccionada() || isSaving()"
+                      (click)="reservar()">
+                @if (isSaving()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span> Reservando...
+                } @else {
+                  <i class="bi bi-calendar-check me-1"></i> Confirmar Reserva
+                }
+              </button>
+              <button type="button" class="btn btn-premium btn-premium-outline"
+                      (click)="cambiarTab('odontologos')">
+                <i class="bi bi-arrow-left me-1"></i> Volver
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ============================================================
+         TAB: Dejar Comentario (Testimonio)
+         ============================================================ -->
+    @if (activeTab() === 'comentar') {
+      <div class="card-premium" style="max-width: 600px; margin: 0 auto;">
+        <div class="card-header" style="background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);">
+          <i class="bi bi-chat-heart-fill me-2"></i>
+          Cuéntanos tu Experiencia
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-4 text-center">
+            Tus comentarios nos ayudan a mejorar y aparecerán en nuestra página principal.
+          </p>
+
+          <form [formGroup]="testimonioForm" (ngSubmit)="enviarTestimonio()">
+            
+            <!-- Servicio evaluado -->
+            <div class="mb-3">
+              <label class="form-label-premium"><i class="bi bi-briefcase me-1"></i> Servicio Evaluado *</label>
+              <select class="form-control form-control-premium" formControlName="servicio">
+                <option value="" disabled>Selecciona el servicio</option>
+                @for (srv of servicios(); track srv.id) {
+                  <option [value]="srv.nombre">{{ srv.nombre }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Estrellas -->
+            <div class="mb-3">
+              <label class="form-label-premium"><i class="bi bi-star-fill me-1" style="color: var(--warning);"></i> Calificación *</label>
+              <select class="form-control form-control-premium" formControlName="estrellas">
+                <option [value]="5">⭐⭐⭐⭐⭐ (5) - Excelente</option>
+                <option [value]="4">⭐⭐⭐⭐ (4) - Muy Bueno</option>
+                <option [value]="3">⭐⭐⭐ (3) - Bueno</option>
+                <option [value]="2">⭐⭐ (2) - Regular</option>
+                <option [value]="1">⭐ (1) - Malo</option>
+              </select>
+            </div>
+
+            <!-- Comentario -->
+            <div class="mb-4">
+              <label class="form-label-premium"><i class="bi bi-pencil me-1"></i> Tu Comentario *</label>
+              <textarea class="form-control form-control-premium" 
+                        formControlName="comentario" 
+                        rows="4" 
+                        placeholder="Escribe tu experiencia (mínimo 10 caracteres)..."></textarea>
+              @if (testimonioForm.get('comentario')?.invalid && testimonioForm.get('comentario')?.touched) {
+                <div class="validation-error mt-1">
+                  <i class="bi bi-exclamation-circle"></i> El comentario debe tener al menos 10 caracteres.
+                </div>
+              }
+            </div>
+
+            <button type="submit" class="btn-premium btn-premium-success w-100 justify-content-center" [disabled]="testimonioForm.invalid">
+              <i class="bi bi-send-fill me-1"></i> Enviar Comentario
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

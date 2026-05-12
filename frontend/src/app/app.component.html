@@ -5,7 +5,7 @@
   <nav class="main-navbar">
     <div class="navbar-inner">
       <!-- Logo + Marca -->
-      <a routerLink="/dashboard" class="navbar-brand">
+      <a [routerLink]="authService.isAdmin() ? '/dashboard' : '/mi-portal'" class="navbar-brand">
         <img src="assets/img/logo.png" alt="OdontoCare Logo" class="navbar-logo">
         <span class="brand-text">OdontoCare</span>
       </a>
@@ -17,22 +17,42 @@
 
       <!-- Links de navegación -->
       <div class="navbar-links" [class.open]="mobileMenuOpen()">
-        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
-          <i class="bi bi-grid-1x2-fill"></i>
-          <span>Dashboard</span>
-        </a>
-        <a routerLink="/pacientes" routerLinkActive="active" class="nav-item">
-          <i class="bi bi-people-fill"></i>
-          <span>Pacientes</span>
-        </a>
-        <a routerLink="/odontologos" routerLinkActive="active" class="nav-item">
-          <i class="bi bi-person-badge-fill"></i>
-          <span>Odontólogos</span>
-        </a>
-        <a routerLink="/citas" routerLinkActive="active" class="nav-item">
-          <i class="bi bi-calendar-check-fill"></i>
-          <span>Citas</span>
-        </a>
+
+        <!-- === MENÚ ADMIN === -->
+        @if (authService.isAdmin()) {
+          <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+          </a>
+          <a routerLink="/pacientes" routerLinkActive="active" class="nav-item">
+            <i class="bi bi-people-fill"></i>
+            <span>Pacientes</span>
+          </a>
+          <a routerLink="/odontologos" routerLinkActive="active" class="nav-item">
+            <i class="bi bi-person-badge-fill"></i>
+            <span>Odontólogos</span>
+          </a>
+          <a routerLink="/citas" routerLinkActive="active" class="nav-item">
+            <i class="bi bi-calendar-check-fill"></i>
+            <span>Citas</span>
+          </a>
+        }
+
+        <!-- === MENÚ PACIENTE === -->
+        @if (!authService.isAdmin()) {
+          <a routerLink="/mi-portal" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+            <i class="bi bi-house-heart-fill"></i>
+            <span>Mi Portal</span>
+          </a>
+          <a routerLink="/mi-portal" fragment="odontologos" routerLinkActive="active" class="nav-item">
+            <i class="bi bi-person-badge-fill"></i>
+            <span>Odontólogos</span>
+          </a>
+          <a routerLink="/mi-portal" fragment="historial" routerLinkActive="active" class="nav-item">
+            <i class="bi bi-journal-medical"></i>
+            <span>Mi Historial</span>
+          </a>
+        }
 
         <!-- Separador -->
         <div class="nav-spacer"></div>
@@ -64,6 +84,7 @@
       </a>
       <nav class="header-nav">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+        <a routerLink="/servicios" routerLinkActive="active">Servicios</a>
         @if (!isLoggedIn()) {
           <a routerLink="/login" routerLinkActive="active" class="header-login-btn">
             <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión

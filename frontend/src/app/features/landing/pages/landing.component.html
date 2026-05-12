@@ -24,10 +24,10 @@
     <!-- Contenedor del carrusel con botones -->
     <div class="carousel-wrapper">
         <!-- Botón izquierdo del carrusel -->
-        <button class="carousel-btn left-btn">&#10094;</button>
+        <button class="carousel-btn left-btn" (click)="scrollLeft()">&#10094;</button>
 
         <!-- Carrusel de servicios -->
-        <div class="carousel">
+        <div class="carousel" #carouselContainer>
             <!-- Servicio: Odontología general -->
             <div class="servicio">
                 <img src="assets/img/images.jpg" alt="Odontología General">
@@ -67,7 +67,7 @@
         </div>
 
         <!-- Botón derecho del carrusel -->
-        <button class="carousel-btn right-btn">&#10095;</button>
+        <button class="carousel-btn right-btn" (click)="scrollRight()">&#10095;</button>
     </div>
     
     <!-- Botón para ver todos los servicios -->
@@ -84,27 +84,18 @@
 
     <!-- Grid de testimonios -->
     <div class="testimonios-grid">
-        <!-- Testimonio 1 -->
-        <div class="testimonio">
-            <p>"Excelente atención y resultados. Muy recomendados."</p>
-            <p>- Juan Pérez</p>
-            <p>⭐⭐⭐⭐⭐</p>
-            <p>Servicio: Ortodoncia</p>
-        </div>
-        <!-- Testimonio 2 -->
-        <div class="testimonio">
-            <p>"Profesionales y amables. Me hicieron sentir muy cómoda."</p>
-            <p>- Rosa López</p>
-            <p>⭐⭐⭐⭐</p>
-            <p>Servicio: Blanqueamiento</p>
-        </div>
-        <!-- Testimonio 3 -->
-        <div class="testimonio">
-            <p>"El tratamiento de implantes fue impecable."</p>
-            <p>- Luis Fernández</p>
-            <p>⭐⭐⭐⭐⭐</p>
-            <p>Servicio: Implantes Dentales</p>
-        </div>
+        @for (t of testimonioService.testimonios(); track t.id) {
+            <div class="testimonio">
+                <p>"{{ t.comentario }}"</p>
+                <p>- {{ t.autor }}</p>
+                <p>{{ getEstrellas(t.estrellas) }}</p>
+                <p>Servicio: {{ t.servicio }}</p>
+            </div>
+        } @empty {
+            <div class="testimonio w-100 text-center" style="grid-column: 1 / -1;">
+                <p>Aún no hay testimonios registrados. ¡Sé el primero en contarnos tu experiencia!</p>
+            </div>
+        }
     </div>
 </section>
 

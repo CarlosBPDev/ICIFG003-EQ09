@@ -25,7 +25,7 @@
       <div class="row g-4 mb-4">
         <!-- Pacientes -->
         <div class="col-md-4">
-          <div class="stat-card stat-primary">
+          <div class="card-inicio-style" style="border-top-color: var(--primary);">
             <div class="d-flex align-items-start justify-content-between">
               <div>
                 <div class="stat-label mb-1">Pacientes Activos</div>
@@ -44,7 +44,7 @@
 
         <!-- Odontólogos -->
         <div class="col-md-4">
-          <div class="stat-card stat-success">
+          <div class="card-inicio-style" style="border-top-color: var(--success);">
             <div class="d-flex align-items-start justify-content-between">
               <div>
                 <div class="stat-label mb-1">Odontólogos Activos</div>
@@ -63,7 +63,7 @@
 
         <!-- Citas -->
         <div class="col-md-4">
-          <div class="stat-card stat-warning">
+          <div class="card-inicio-style" style="border-top-color: var(--warning);">
             <div class="d-flex align-items-start justify-content-between">
               <div>
                 <div class="stat-label mb-1">Citas Registradas</div>
@@ -83,33 +83,77 @@
     }
 
     <!-- Quick Actions -->
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
       <div class="col-md-4">
-        <a routerLink="/pacientes" class="card-premium d-block text-decoration-none p-4 text-center">
+        <a routerLink="/pacientes" class="card-inicio-style d-block text-decoration-none text-center" style="border-top-color: var(--primary);">
           <i class="bi bi-person-plus-fill mb-2" style="font-size: 2rem; color: var(--primary);"></i>
           <h6 style="font-weight: 700; color: var(--neutral-900);">Nuevo Paciente</h6>
           <p style="font-size: var(--font-size-xs); color: var(--neutral-500); margin: 0;">
-            Registrar un nuevo paciente en el sistema
+            Registrar un nuevo paciente
           </p>
         </a>
       </div>
       <div class="col-md-4">
-        <a routerLink="/odontologos" class="card-premium d-block text-decoration-none p-4 text-center">
+        <a routerLink="/odontologos" class="card-inicio-style d-block text-decoration-none text-center" style="border-top-color: var(--success);">
           <i class="bi bi-person-badge mb-2" style="font-size: 2rem; color: var(--success);"></i>
           <h6 style="font-weight: 700; color: var(--neutral-900);">Nuevo Odontólogo</h6>
           <p style="font-size: var(--font-size-xs); color: var(--neutral-500); margin: 0;">
-            Agregar un profesional al equipo
+            Añadir profesional al equipo
           </p>
         </a>
       </div>
       <div class="col-md-4">
-        <a routerLink="/citas" class="card-premium d-block text-decoration-none p-4 text-center">
+        <a routerLink="/citas" class="card-inicio-style d-block text-decoration-none text-center" style="border-top-color: var(--warning);">
           <i class="bi bi-calendar-plus mb-2" style="font-size: 2rem; color: var(--warning);"></i>
           <h6 style="font-weight: 700; color: var(--neutral-900);">Reservar Cita</h6>
           <p style="font-size: var(--font-size-xs); color: var(--neutral-500); margin: 0;">
-            Agendar una nueva cita odontológica
+            Agendar nueva consulta
           </p>
         </a>
+      </div>
+    </div>
+
+    <!-- Gestión de Testimonios -->
+    <div class="card-premium">
+      <div class="card-header" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);">
+        <i class="bi bi-chat-quote-fill me-2"></i> Gestión de Testimonios (Landing Page)
+      </div>
+      <div class="card-body p-0">
+        @if (testimonioService.testimonios().length === 0) {
+          <div class="text-center p-4" style="color: var(--neutral-500);">
+            <p class="mb-0">No hay testimonios registrados.</p>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table-premium mb-0">
+              <thead>
+                <tr>
+                  <th>Autor</th>
+                  <th>Comentario</th>
+                  <th>Estrellas</th>
+                  <th>Servicio</th>
+                  <th class="text-end">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (t of testimonioService.testimonios(); track t.id) {
+                  <tr>
+                    <td><strong>{{ t.autor }}</strong></td>
+                    <td><span class="text-truncate d-inline-block" style="max-width: 300px;">"{{ t.comentario }}"</span></td>
+                    <td><span style="color: var(--warning);">{{ '⭐'.repeat(t.estrellas) }}</span></td>
+                    <td><span class="badge-premium badge-activo">{{ t.servicio }}</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-premium-danger" title="Eliminar"
+                              (click)="testimonioService.eliminar(t.id)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
       </div>
     </div>
 

@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div class="container">
+    <div class="page-header text-center mb-5">
+      <h1 class="page-title justify-content-center">
+        <i class="bi bi- briefcase-fill" style="color: var(--primary);"></i>
+        Nuestros Servicios Odontológicos
+      </h1>
+      <p class="page-subtitle">
+        Ofrecemos una amplia gama de tratamientos con la última tecnología y los mejores profesionales.
+      </p>
+    </div>
+
+    @if (isLoading()) {
+      <div class="row g-4">
+        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+          <div class="col-md-4">
+            <div class="skeleton" style="height: 250px;"></div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="row g-4">
+        @for (servicio of servicios(); track servicio.id) {
+          <div class="col-md-4">
+            <div class="card-inicio-style h-100 d-flex flex-column">
+              <div class="mb-3">
+                <h3 class="h5 mb-2" style="color: var(--primary); font-weight: 700;">{{ servicio.nombre }}</h3>
+                <p class="text-muted small mb-3">{{ servicio.descripcion }}</p>
+              </div>
+              
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge-premium badge-activo">
+                    <i class="bi bi-clock"></i> {{ servicio.duracionMinutos }} min
+                  </span>
+                  <span class="h6 mb-0" style="color: var(--neutral-900); font-weight: 700;">
+                    ${{ servicio.precio | number:'1.0-0' }}
+                  </span>
+                </div>
+                <button class="btn-premium btn-premium-primary w-100 justify-content-center" routerLink="/citas">
+                  Reservar Hora
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="text-center mt-5">
+      <button class="btn-premium btn-premium-outline" routerLink="/">
+        <i class="bi bi-arrow-left"></i> Volver al Inicio
+      </button>
+    </div>
+  </div>
+</div>

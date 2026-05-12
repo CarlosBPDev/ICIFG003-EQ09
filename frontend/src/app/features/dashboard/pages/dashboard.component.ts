@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClinicaService } from '../../../core/services/clinica.service';
+import { TestimonioService } from '../../../core/services/testimonio.service';
 import { PacienteResponse, OdontologoResponse, CitaResponse } from '../../../shared/models/models';
 
 @Component({
@@ -11,6 +12,7 @@ import { PacienteResponse, OdontologoResponse, CitaResponse } from '../../../sha
 })
 export class DashboardComponent implements OnInit {
   private readonly clinicaService = inject(ClinicaService);
+  readonly testimonioService = inject(TestimonioService);
 
   readonly pacientes = signal<PacienteResponse[]>([]);
   readonly odontologos = signal<OdontologoResponse[]>([]);

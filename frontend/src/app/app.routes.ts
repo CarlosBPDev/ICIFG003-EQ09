@@ -27,6 +27,13 @@ export const routes: Routes = [
     title: 'Dashboard — Panel de Control'
   },
   {
+    path: 'mi-portal',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/portal-paciente/pages/portal-paciente.component').then(m => m.PortalPacienteComponent),
+    title: 'Mi Portal — OdontoCare'
+  },
+  {
     path: 'pacientes',
     canActivate: [authGuard],
     loadComponent: () =>
@@ -46,6 +53,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/citas/pages/citas.component').then(m => m.CitasComponent),
     title: 'Gestión de Citas'
+  },
+  {
+    path: 'servicios',
+    loadComponent: () =>
+      import('./features/servicios/pages/servicios.component').then(m => m.ServiciosComponent),
+    title: 'Nuestros Servicios — OdontoCare'
   },
   {
     path: '**',

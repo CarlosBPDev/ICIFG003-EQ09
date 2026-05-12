@@ -39,7 +39,7 @@
 }
 
 .navbar-logo {
-  height: 42px;
+  height: 54px;
   width: auto;
   object-fit: contain;
   border-radius: 6px;
@@ -169,7 +169,7 @@
    ============================================================ */
 
 .public-header {
-  background: #0fa49c;
+  background: var(--primary);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -188,7 +188,7 @@
 }
 
 .header-logo {
-  height: 70px;
+  height: 90px;
   width: auto;
   object-fit: contain;
 }

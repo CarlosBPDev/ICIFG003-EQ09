@@ -4,14 +4,14 @@
    ============================================================ */
 
 :root {
-  /* — Color Palette — */
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --primary-light: #dbeafe;
-  --primary-surface: #eff6ff;
+  /* — Color Palette (Teal & Yellow) — */
+  --primary: #0fa49c;
+  --primary-hover: #0c837d;
+  --primary-light: #ccfbf1;
+  --primary-surface: #f4f9f9;
 
-  --accent: #06b6d4;
-  --accent-hover: #0891b2;
+  --accent: #e5b600;
+  --accent-hover: #cc9f00;
 
   --success: #10b981;
   --success-light: #d1fae5;
@@ -183,6 +183,24 @@ a:hover {
 
 .card-premium .card-body {
   padding: 1.5rem;
+}
+
+/* ============================================================
+   Card Inicio Style (Para igualar las formas del Landing)
+   ============================================================ */
+.card-inicio-style {
+  background-color: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: none;
+  border-top: 4px solid var(--primary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-inicio-style:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(15, 164, 156, 0.15);
 }
 
 /* ============================================================

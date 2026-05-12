@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly notificationService = inject(NotificationService);
+  private readonly authService = inject(AuthService);
 
   readonly isLoading = signal(false);
 
@@ -43,30 +45,32 @@ export class LoginComponent implements OnInit {
 
     this.isLoading.set(true);
 
-    const { usuario, password, recordarme } = this.loginForm.value;
+    const usuario = (this.loginForm.get('usuario')?.value || '').trim();
+    const password = (this.loginForm.get('password')?.value || '').trim();
+    const recordarme = this.loginForm.get('recordarme')?.value;
 
-    // Simulación de autenticación (en producción, llamaría a un servicio)
-    setTimeout(() => {
-      // Validar credenciales de prueba
-      if (usuario === 'admin' && password === 'admin') {
-        // Guardar sesión del usuario (requerido por el authGuard)
-        localStorage.setItem('clinica_usuario', usuario);
+    const success = this.authService.login(usuario, password);
 
-        // Guardar usuario si se seleccionó recordarme
-        if (recordarme) {
-          localStorage.setItem('usuario_guardado', usuario);
-        } else {
-          localStorage.removeItem('usuario_guardado');
-        }
-
-        this.notificationService.success(`¡Bienvenido, ${usuario}!`, 'Sesión iniciada correctamente');
-        this.router.navigate(['/dashboard']);
+    if (success) {
+      if (recordarme) {
+        localStorage.setItem('usuario_guardado', usuario);
       } else {
-        this.notificationService.error('Credenciales inválidas', 'Usuario o contraseña incorrectos. Prueba: admin / admin');
-        this.loginForm.get('password')?.reset();
+        localStorage.removeItem('usuario_guardado');
       }
 
-      this.isLoading.set(false);
-    }, 1500);
+      const role = this.authService.role();
+      if (role === 'admin') {
+        this.notificationService.success('¡Bienvenido, Administrador!', 'Acceso al panel de gestión');
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.notificationService.success('¡Bienvenido, Paciente!', 'Acceso a tu portal de salud');
+        this.router.navigate(['/mi-portal']);
+      }
+    } else {
+      this.notificationService.error('Credenciales inválidas', 'Prueba: admin/admin ó user/user');
+      this.loginForm.get('password')?.reset();
+    }
+
+    this.isLoading.set(false);
   }
 }
