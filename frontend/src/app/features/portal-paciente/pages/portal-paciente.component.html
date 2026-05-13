@@ -202,7 +202,7 @@
                       <td><i class="bi bi-calendar3 me-1" style="color: var(--primary);"></i> {{ cita.fecha }}</td>
                       <td><i class="bi bi-clock me-1" style="color: var(--accent);"></i> {{ cita.hora }}</td>
                       <td>Dr(a). {{ cita.dentista.nombre }} {{ cita.dentista.apellido }}</td>
-                      <td>{{ cita.servicio?.nombre || 'Sin definir' }}</td>
+                      <td>{{ cita.servicio.nombre || 'Sin definir' }}</td>
                       <td>
                         @if (cita.estado === 'RESERVADA') {
                           <span class="badge-premium badge-activo">
