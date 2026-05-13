@@ -38,9 +38,9 @@ psql --version
 
 ---
 
-## 🚀 INICIO RÁPIDO: 4 Pasos para Arrancar
+## 🚀 INICIO RÁPIDO: Instrucciones para Arrancar
 
-> ⏱️ **Tiempo total: ~5-10 minutos** (depende de descargas)
+> ⏱️ **Tiempo total: ~5-10 minutos**
 
 ---
 
@@ -58,40 +58,46 @@ cd ICIFG003-EQ09
 
 ---
 
-### ✅ Paso 2: Crear Base de Datos e Insertar Datos (Automático)
+### ✅ Paso 2: Compilar el Backend
 
-**Paso 1: Crear la Estructura de la Base de Datos**
+Abre una terminal en la carpeta raíz y ejecuta:
 
-1. Navega a la carpeta raíz del proyecto
-2. **Doble click** en `create-database.bat`
-3. Se abrirá una terminal y verás:
-   ```
-   ✓ Iniciando servidor Spring Boot...
-   ✓ Creando estructura de base de datos
-   ```
-4. Espera hasta ver:
-   ```
-   Tomcat started on port(s): 8080
-   ```
-5. **Presiona Ctrl+C** para detener el servidor
+```bash
+cd backend
+mvn clean install
+mvn package
+```
 
-**Paso 2: Insertar Datos Automáticamente**
-
-1. **Doble click** en `insert-data.bat`
-2. Se abrirá otra terminal e insertará automáticamente:
-   - ✅ 5 Servicios (Consulta General, Limpieza, Ortodoncia, Endodoncia, Blanqueamiento)
-   - ✅ Datos de prueba en la base de datos
-3. Se abrirá una consola H2:
-   - URL: `http://localhost:8080/h2-console`
-   - Database: `jdbc:h2:mem:clinica_db`
-   - Username: `sa` (sin contraseña)
-4. **Presiona Ctrl+C** cuando hayas terminado
+Si funciona verás:
+```
+✅ BUILD SUCCESS
+```
 
 ---
 
-### ✅ Paso 3: Ejecutar el Frontend
+### ✅ Paso 3: Insertar Datos en la Base de Datos (Automático)
 
-Abre una terminal en la carpeta raíz y ejecuta:
+**Opción A: Usar el script .bat** ⭐
+
+1. Navega a la carpeta raíz
+2. **Doble click** en `insert-data.bat`
+3. Se iniciará el servidor y los datos se insertarán automáticamente
+4. Presiona **Ctrl+C** cuando hayas terminado
+
+**Opción B: Iniciar manualmente**
+
+```bash
+cd backend
+java -jar target/odontologica-1.0.0.jar
+```
+
+El servidor estará en: `http://localhost:8080`
+
+---
+
+### ✅ Paso 4: Ejecutar el Frontend
+
+Abre una **NUEVA terminal** en la carpeta raíz y ejecuta:
 
 ```bash
 cd frontend
@@ -99,19 +105,13 @@ npm install
 ng serve
 ```
 
-**Si funciona verás:**
+Si funciona verás:
 ```
 ✅ Application bundle generation complete
 ✅ http://localhost:4200
 ```
 
----
-
-### ✅ Paso 4: Acceder a la Aplicación (FINAL)
-
-1. Abre tu navegador en `http://localhost:4200`
-2. Serás redirigido a la página de **Login**
-3. Inicia sesión con las credenciales:
+El navegador se abrirá automáticamente en `http://localhost:4200`
 
 ---
 

@@ -24,21 +24,19 @@ if not exist "target\odontologica-1.0.0.jar" (
 )
 
 echo ✓ Iniciando servidor Spring Boot...
-echo ✓ Insertando datos iniciales...
+echo ✓ Insertando datos iniciales en la base de datos
 echo.
 echo Los siguientes datos se insertarán automáticamente:
-echo   - 5 Servicios (Consulta General, Limpieza, etc)
-echo   - Pacientes de prueba (opcional)
-echo   - Odontólogos de prueba (opcional)
+echo   - 5 Servicios Odontológicos
+echo   - Estructura de tablas
 echo.
-echo ℹ️  Para acceder a H2 Console mientras el servidor esté activo:
+echo ℹ️  Base de datos: H2 (en memoria)
+echo ℹ️  Puerto: 8080
+echo.
+echo Para acceder a la consola H2 mientras el servidor está activo:
 echo   http://localhost:8080/h2-console
-echo.
-echo Para insertar DATOS ADICIONALES manualmente:
-echo   1. Abre http://localhost:8080/h2-console
-echo   2. Database: jdbc:h2:mem:clinica_db
-echo   3. Username: sa (sin contraseña)
-echo   4. Ejecuta tus INSERT statements
+echo   Database: jdbc:h2:mem:clinica_db
+echo   Username: sa (sin contraseña)
 echo.
 echo Presiona Ctrl+C cuando hayas terminado
 echo.
