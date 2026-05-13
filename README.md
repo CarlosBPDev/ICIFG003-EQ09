@@ -58,46 +58,40 @@ cd ICIFG003-EQ09
 
 ---
 
-### ✅ Paso 2: Ejecutar con Scripts Automáticos (RECOMENDADO)
+### ✅ Paso 2: Crear Base de Datos e Insertar Datos (Automático)
 
-**Opción A: Iniciar TODO automáticamente** ⭐
+**Paso 1: Crear la Estructura de la Base de Datos**
 
 1. Navega a la carpeta raíz del proyecto
-2. **Doble click** en `start-all.bat`
-3. Se abrirán 2 ventanas:
-   - Backend en puerto 8080
-   - Frontend en puerto 4200
-4. Espera 20-30 segundos
-5. El navegador se abrirá automáticamente en `http://localhost:4200`
+2. **Doble click** en `create-database.bat`
+3. Se abrirá una terminal y verás:
+   ```
+   ✓ Iniciando servidor Spring Boot...
+   ✓ Creando estructura de base de datos
+   ```
+4. Espera hasta ver:
+   ```
+   Tomcat started on port(s): 8080
+   ```
+5. **Presiona Ctrl+C** para detener el servidor
 
-**Opción B: Iniciar servicios por separado**
+**Paso 2: Insertar Datos Automáticamente**
 
-- Backend solo: **`start-backend.bat`** (puerto 8080)
-- Frontend solo: **`start-frontend.bat`** (puerto 4200)
-
----
-
-### ✅ Paso 3: Ejecutar el Backend Manualmente (Opcional)
-
-Si **NO usas los scripts .bat**, ejecuta manualmente:
-
-```bash
-cd backend
-mvn clean install
-mvn spring-boot:run
-```
-
-**Si funciona verás:**
-```
-✅ Tomcat started on port(s): 8080
-✅ http://localhost:8080
-```
+1. **Doble click** en `insert-data.bat`
+2. Se abrirá otra terminal e insertará automáticamente:
+   - ✅ 5 Servicios (Consulta General, Limpieza, Ortodoncia, Endodoncia, Blanqueamiento)
+   - ✅ Datos de prueba en la base de datos
+3. Se abrirá una consola H2:
+   - URL: `http://localhost:8080/h2-console`
+   - Database: `jdbc:h2:mem:clinica_db`
+   - Username: `sa` (sin contraseña)
+4. **Presiona Ctrl+C** cuando hayas terminado
 
 ---
 
-### ✅ Paso 4: Ejecutar el Frontend Manualmente (Opcional)
+### ✅ Paso 3: Ejecutar el Frontend
 
-Si **NO usas los scripts .bat**, ejecuta manualmente:
+Abre una terminal en la carpeta raíz y ejecuta:
 
 ```bash
 cd frontend
@@ -113,21 +107,29 @@ ng serve
 
 ---
 
-### 🎯 Login para Probar
+### ✅ Paso 4: Acceder a la Aplicación (FINAL)
 
-**Credenciales por defecto:**
+1. Abre tu navegador en `http://localhost:4200`
+2. Serás redirigido a la página de **Login**
+3. Inicia sesión con las credenciales:
+
+---
+
+### 🎯 Credenciales de Login
+
+**Usuario Regular (Paciente):**
 ```
 Usuario: user
 Contraseña: user
 ```
 
-**Admin:**
+**Admin (Administrador):**
 ```
 Usuario: admin
 Contraseña: admin
 ```
 
-> **Los datos de servicios, odontólogos y pacientes se cargan automáticamente** desde `backend/src/main/resources/data.sql` cuando inicia el servidor.
+> **Los datos de servicios, odontólogos y pacientes se cargan automáticamente** desde `backend/src/main/resources/data.sql` cuando inicia el servidor con los scripts `.bat`
 
 **¡Listo! 🎉 El proyecto está corriendo.**
 
