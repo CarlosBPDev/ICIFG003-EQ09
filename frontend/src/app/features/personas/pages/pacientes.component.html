@@ -53,7 +53,13 @@
                        formControlName="rut" placeholder="Ej: 12345678-9">
                 @if (pacienteForm.get('rut')?.invalid && pacienteForm.get('rut')?.touched) {
                   <div class="validation-error">
-                    <i class="bi bi-exclamation-circle"></i> El RUT es obligatorio (7-12 caracteres)
+                    @if (pacienteForm.get('rut')?.errors?.['required']) {
+                      <i class="bi bi-exclamation-circle"></i> El RUT es obligatorio
+                    } @else if (pacienteForm.get('rut')?.errors?.['invalidRut']) {
+                      <i class="bi bi-exclamation-circle"></i> Formato: números-dígito (Ej: 12345678-9)
+                    } @else {
+                      <i class="bi bi-exclamation-circle"></i> El RUT es inválido
+                    }
                   </div>
                 }
               </div>
@@ -70,7 +76,12 @@
               <div class="col-md-4">
                 <label class="form-label-premium" for="telefono">Teléfono</label>
                 <input id="telefono" type="text" class="form-control form-control-premium"
-                       formControlName="telefono" placeholder="Ej: +56 9 1234 5678">
+                       formControlName="telefono" placeholder="Ej: 5696708751" pattern="[0-9]*">
+                @if (pacienteForm.get('telefono')?.invalid && pacienteForm.get('telefono')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> Solo se permiten números (Ej: 5696708751)
+                  </div>
+                }
               </div>
               <div class="col-md-4">
                 <label class="form-label-premium" for="fechaNacimiento">Fecha de Nacimiento</label>
@@ -144,11 +155,11 @@
                       <div class="d-flex gap-1">
                         <button class="btn btn-sm btn-premium btn-premium-outline"
                                 (click)="abrirFormulario(paciente)" title="Editar">
-                          <i class="bi bi-pencil"></i>
+                          <i class="bi bi-pencil me-1"></i> Editar
                         </button>
                         <button class="btn btn-sm btn-premium btn-premium-danger"
                                 (click)="eliminar(paciente)" title="Eliminar">
-                          <i class="bi bi-trash"></i>
+                          <i class="bi bi-trash me-1"></i> Eliminar
                         </button>
                       </div>
                     </td>

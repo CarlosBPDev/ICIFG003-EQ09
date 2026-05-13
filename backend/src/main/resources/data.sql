@@ -3,6 +3,13 @@
 -- Se ejecuta automáticamente al iniciar Spring Boot
 -- ==========================================
 
+-- Limpiar datos existentes
+DELETE FROM "citas";
+DELETE FROM "horarios_disponibles";
+DELETE FROM "servicios";
+DELETE FROM "dentistas";
+DELETE FROM "pacientes";
+
 -- Servicios disponibles en la clínica
 INSERT INTO "servicios" ("nombre", "descripcion", "duracion_minutos", "precio")
 VALUES ('Consulta General', 'Revisión y diagnóstico dental general', 30, 15000);

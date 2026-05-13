@@ -1,0 +1,78 @@
+/*!
+ * Bootstrap Icons v1.13.1 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2024 The Bootstrap Authors
+ * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+ * 
+ * Local copy with corrected font paths for src/assets/fonts
+ */
+
+@font-face {
+  font-display: block;
+  font-family: "bootstrap-icons";
+  src: url("../fonts/bootstrap-icons.woff2") format("woff2"),
+url("../fonts/bootstrap-icons.woff") format("woff");
+}
+
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  display: inline-block;
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bi-123::before { content: "\f67f"; }
+.bi-alarm-fill::before { content: "\f101"; }
+.bi-alarm::before { content: "\f102"; }
+.bi-align-bottom::before { content: "\f103"; }
+.bi-align-center::before { content: "\f104"; }
+.bi-align-end::before { content: "\f105"; }
+.bi-align-middle::before { content: "\f106"; }
+.bi-align-start::before { content: "\f107"; }
+.bi-align-top::before { content: "\f108"; }
+.bi-alt::before { content: "\f109"; }
+.bi-app-indicator::before { content: "\f10a"; }
+.bi-app::before { content: "\f10b"; }
+.bi-archive-fill::before { content: "\f10c"; }
+.bi-archive::before { content: "\f10d"; }
+.bi-arrow-90deg-down::before { content: "\f10e"; }
+.bi-arrow-90deg-left::before { content: "\f10f"; }
+.bi-arrow-90deg-right::before { content: "\f110"; }
+.bi-arrow-90deg-up::before { content: "\f111"; }
+.bi-arrow-bar-down::before { content: "\f112"; }
+.bi-arrow-bar-left::before { content: "\f113"; }
+.bi-arrow-bar-right::before { content: "\f114"; }
+.bi-arrow-bar-up::before { content: "\f115"; }
+.bi-arrow-clockwise::before { content: "\f116"; }
+.bi-arrow-counterclockwise::before { content: "\f117"; }
+.bi-arrow-down-circle-fill::before { content: "\f118"; }
+.bi-arrow-down-circle::before { content: "\f119"; }
+.bi-arrow-down-left-circle-fill::before { content: "\f11a"; }
+.bi-arrow-down-left-circle::before { content: "\f11b"; }
+.bi-arrow-down-left-square-fill::before { content: "\f11c"; }
+.bi-arrow-down-left-square::before { content: "\f11d"; }
+.bi-arrow-down-left::before { content: "\f11e"; }
+.bi-arrow-down-right-circle-fill::before { content: "\f11f"; }
+.bi-arrow-down-right-circle::before { content: "\f120"; }
+.bi-arrow-down-right-square-fill::before { content: "\f121"; }
+.bi-arrow-down-right-square::before { content: "\f122"; }
+.bi-arrow-down-right::before { content: "\f123"; }
+.bi-arrow-down-short::before { content: "\f124"; }
+.bi-arrow-down-square-fill::before { content: "\f125"; }
+.bi-arrow-down-square::before { content: "\f126"; }
+.bi-arrow-down-up::before { content: "\f127"; }
+.bi-arrow-down::before { content: "\f128"; }
+.bi-arrow-left-circle-fill::before { content: "\f129"; }
+.bi-arrow-left-circle::before { content: "\f12a"; }
+.bi-arrow-left-right::before { content: "\f12b"; }
+.bi-arrow-left-short::before { content: "\f12c"; }
+.bi-arrow-left-square-fill::before { content: "\f12d"; }
+.bi-arrow-left-square::before { content: "\f12e"; }
+.bi-arrow-left::before { content: "\f12f"; }

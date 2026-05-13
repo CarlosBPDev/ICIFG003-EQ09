@@ -82,25 +82,25 @@ body, html {
 }
 
 .clinic-logo {
-  width: 160px;
-  height: 160px;
-  margin-bottom: 35px;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 25px;
   filter: brightness(0) invert(1);
   object-fit: contain;
 }
 
 .login-info h1 {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   letter-spacing: -1.5px;
   text-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .clinic-tagline {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   opacity: 0.95;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   font-weight: 400;
   letter-spacing: 0.5px;
 }
@@ -133,25 +133,32 @@ body, html {
   align-items: center;
   justify-content: center;
   padding: 40px;
-  background-color: var(--white);
+  background-color: var(--light-bg);
 }
 
 .login-form {
   width: 100%;
   max-width: 420px;
+  background-color: var(--white);
+  padding: 40px;
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .login-form h2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: var(--dark);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-weight: 700;
+  text-align: center;
 }
 
 .subtitle {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
-  margin-bottom: 30px;
+  margin-bottom: 28px;
+  text-align: center;
 }
 
 /* =====================
@@ -325,30 +332,7 @@ body, html {
   transform: translateY(-2px);
 }
 
-/* =====================
-   CREDENCIALES DE PRUEBA
-===================== */
-.test-credentials {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color);
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
 
-.test-credentials p {
-  margin: 4px 0;
-}
-
-.test-credentials code {
-  background-color: var(--light-bg);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  color: var(--danger-color);
-  font-weight: 600;
-}
 
 /* =====================
    RESPONSIVE

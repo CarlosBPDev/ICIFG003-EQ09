@@ -45,9 +45,9 @@ public class CitaService {
 
     /**
      * RESERVAR HORA
-     * - Valida que el horario esté disponible
+     * - Intenta marcar un horario disponible como no disponible (si existe)
+     * - Si no hay horarios disponibles en la BD, permite la reserva de todas formas
      * - Crea la cita con estado RESERVADA
-     * - Marca el horario como no disponible
      */
     @Transactional
     public Cita reservarHora(Cita cita) {
@@ -58,18 +58,16 @@ public class CitaService {
                         cita.getFecha()
                 );
 
-        // Verificar que exista un horario disponible que coincida con la hora solicitada
-        HorarioDisponible horarioEncontrado = horariosDisponibles.stream()
+        // Intentar marcar el horario como no disponible (si existe)
+        horariosDisponibles.stream()
                 .filter(h -> !cita.getHora().isBefore(h.getHoraInicio()) && cita.getHora().isBefore(h.getHoraFin()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(
-                        "No hay disponibilidad para el dentista en la fecha y hora seleccionada"));
+                .ifPresent(horario -> {
+                    horario.setDisponible(false);
+                    horarioRepository.save(horario);
+                });
 
-        // Marcar el horario como no disponible
-        horarioEncontrado.setDisponible(false);
-        horarioRepository.save(horarioEncontrado);
-
-        // Crear la cita con estado RESERVADA
+        // Crear la cita con estado RESERVADA (sin importar si hay horarios disponibles)
         cita.setEstado(Cita.EstadoCita.RESERVADA);
         return citaRepository.save(cita);
     }

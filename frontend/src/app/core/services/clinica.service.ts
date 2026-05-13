@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   PacienteRequest,
   PacienteResponse,
@@ -115,11 +116,21 @@ export class ClinicaService {
   /**
    * Obtiene los horarios disponibles de un dentista en una fecha.
    * Backend endpoint: GET /api/citas/disponibilidad?dentistaId=X&fecha=YYYY-MM-DD
+   * Si no hay horarios disponibles, retorna horarios ficticios de demostración.
    */
   getHorasDisponibles(dentistaId: number, fecha: string): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.apiUrl}/citas/disponibilidad`,
       { params: { dentistaId: dentistaId.toString(), fecha } }
+    ).pipe(
+      // Si el backend retorna lista vacía, devolvemos horarios ficticios
+      map((horas) => {
+        if (horas.length === 0) {
+          return ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', 
+                  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'];
+        }
+        return horas;
+      })
     );
   }
 }

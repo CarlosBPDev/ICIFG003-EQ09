@@ -40,7 +40,8 @@
 
         <!-- === MENÚ PACIENTE === -->
         @if (!authService.isAdmin()) {
-          <a routerLink="/mi-portal" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+          <!-- Botones de navegación ocultados - solo se usan los tabs internos -->
+          <!-- <a routerLink="/mi-portal" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
             <i class="bi bi-house-heart-fill"></i>
             <span>Mi Portal</span>
           </a>
@@ -51,7 +52,7 @@
           <a routerLink="/mi-portal" fragment="historial" routerLinkActive="active" class="nav-item">
             <i class="bi bi-journal-medical"></i>
             <span>Mi Historial</span>
-          </a>
+          </a> -->
         }
 
         <!-- Separador -->

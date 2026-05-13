@@ -123,9 +123,12 @@ export class CitasComponent implements OnInit {
 
     this.isSaving.set(true);
 
+    const pacienteId = Number(this.citaForm.get('pacienteId')?.value);
+    const odontologoId = Number(this.citaForm.get('odontologoId')?.value);
+
     const request = {
-      paciente: { id: this.citaForm.get('pacienteId')?.value },
-      dentista: { id: this.citaForm.get('odontologoId')?.value },
+      paciente: { id: pacienteId },
+      dentista: { id: odontologoId },
       servicio: { id: 1 },
       fecha: this.citaForm.get('fecha')?.value,
       hora: hora

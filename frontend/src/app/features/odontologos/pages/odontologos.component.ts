@@ -1,8 +1,21 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ClinicaService } from '../../../core/services/clinica.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { OdontologoResponse } from '../../../shared/models/models';
+
+// Validadores personalizados
+const phoneValidator = (control: AbstractControl): ValidationErrors | null => {
+  if (!control.value) return null;
+  const phoneRegex = /^[0-9]*$/;
+  return phoneRegex.test(control.value) ? null : { invalidPhone: true };
+};
+
+const rutValidator = (control: AbstractControl): ValidationErrors | null => {
+  if (!control.value) return null;
+  const rutRegex = /^[0-9]{7,11}-[0-9kK]$/;
+  return rutRegex.test(control.value) ? null : { invalidRut: true };
+};
 
 @Component({
   selector: 'app-odontologos',
@@ -24,10 +37,10 @@ export class OdontologosComponent implements OnInit {
   readonly odontologoForm: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
     apellido: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-    rut: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(12)]],
+    rut: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(12), rutValidator]],
     especialidad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
     email: ['', [Validators.email]],
-    telefono: ['', [Validators.maxLength(20)]]
+    telefono: ['', [phoneValidator, Validators.maxLength(20)]]
   });
 
   ngOnInit(): void {
