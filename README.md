@@ -134,7 +134,55 @@ Contraseña: admin
 **¡Listo! 🎉 El proyecto está corriendo.**
 
 ---
+## 🔄 Plan B: Si no funciona el .bat
 
+Si el script `insert-data.bat` no funciona o tienes problemas, puedes hacerlo de forma completamente manual:
+
+### **Opción Manual Alternativa:**
+
+**1. Abre una terminal y ve a la carpeta backend:**
+```bash
+cd backend
+```
+
+**2. Compila el proyecto (si no lo hiciste antes):**
+```bash
+mvn clean install
+mvn package
+```
+
+**3. Inicia el servidor manualmente:**
+```bash
+java -jar target/odontologica-1.0.0.jar
+```
+
+**Esperado:** Verás en la terminal:
+```
+Tomcat started on port 8080 (http) with context path ''
+Started ClinicaApplication in X seconds
+```
+
+**4. Los datos se insertan automáticamente en el archivo `data.sql`**
+- 5 Servicios odontológicos
+- 3 Dentistas
+- 3 Pacientes de prueba  
+- 3 Citas registradas
+
+**5. En otra terminal, inicia el frontend:**
+```bash
+cd frontend
+npm install
+ng serve
+```
+
+**6. Abre el navegador en:**
+```
+http://localhost:4200
+```
+
+**7. Presiona Ctrl+C en la terminal del backend cuando termines**
+
+---
 ## � Descripción del Proyecto
 
 Este proyecto cumple íntegramente con los requisitos establecidos para la asignatura:
