@@ -1,12 +1,12 @@
 @echo off
 REM ========================================
-REM Script para iniciar el Backend
+REM Script para CREAR la Base de Datos
 REM OdontoCare - Clínica Dental
 REM ========================================
 
 echo.
 echo ╔════════════════════════════════════════╗
-echo ║   OdontoCare - Backend Startup         ║
+echo ║   OdontoCare - Crear Base de Datos     ║
 echo ╚════════════════════════════════════════╝
 echo.
 
@@ -23,23 +23,21 @@ if not exist "target\odontologica-1.0.0.jar" (
     exit /b 1
 )
 
-REM Mostrar información
 echo ✓ Iniciando servidor Spring Boot...
-echo ✓ Puerto: 8080
-echo ✓ Base de datos: H2 (memoria)
-echo ✓ URL: http://localhost:4200
+echo ✓ Creando estructura de base de datos
 echo.
-echo Espera 15-20 segundos a que el servidor esté listo
-echo Luego abre tu navegador en http://localhost:4200
+echo Las tablas se crearán automáticamente al iniciar:
+echo   - pacientes
+echo   - dentistas
+echo   - servicios
+echo   - citas
+echo   - horarios_disponibles
 echo.
-echo Credentials:
-echo   - Admin: admin / admin
-echo   - User: user / user
-echo.
-echo Presiona Ctrl+C para detener el servidor
+echo Presiona Ctrl+C cuando veas:
+echo   "Tomcat started on port(s): 8080"
 echo.
 
-REM Iniciar el JAR
+REM Iniciar el JAR (esto crea las tablas)
 java -jar target\odontologica-1.0.0.jar
 
 pause
