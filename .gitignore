@@ -27,9 +27,9 @@ backend/logs/
 backend/*.log
 
 # Frontend - Node / npm / Angular
-frontend/node_modules/
-frontend/dist/
-frontend/.angular/
+frontend/node_modules
+frontend/dist
+frontend/.angular
 frontend/.browserslistrc
 frontend/npm-debug.log
 frontend/yarn-error.log

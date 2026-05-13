@@ -29,121 +29,60 @@ body, html {
 }
 
 /* =====================
-   CONTENEDOR PRINCIPAL
+   CONTENEDOR PRINCIPAL (CENTRADO)
 ===================== */
 .login-container {
   display: flex;
-  height: 100vh;
-  width: 100%;
-}
-
-/* =====================
-   LADO IZQUIERDO: INFORMACIÓN
-===================== */
-.login-info {
-  flex: 1;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  color: var(--white);
-  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  position: relative;
-  overflow: hidden;
-}
-
-.login-info::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 500px;
-  height: 500px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-}
-
-.login-info::after {
-  content: '';
-  position: absolute;
-  bottom: -25%;
-  left: -25%;
-  width: 300px;
-  height: 300px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-}
-
-.info-content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  max-width: 400px;
-}
-
-.clinic-logo {
-  width: 140px;
-  height: 140px;
-  margin-bottom: 25px;
-  filter: brightness(0) invert(1);
-  object-fit: contain;
-}
-
-.login-info h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 12px;
-  letter-spacing: -1.5px;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.clinic-tagline {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 50px;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-}
-
-.features {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.feature {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 1rem;
-  opacity: 0.95;
-}
-
-.feature i {
-  font-size: 1.2rem;
-  flex-shrink: 0;
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, var(--light-bg) 0%, #e3f2fd 100%);
+  padding: 20px;
 }
 
 /* =====================
-   LADO DERECHO: FORMULARIO
+   FORMULARIO CENTRADO
 ===================== */
 .login-form-wrapper {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  background-color: var(--light-bg);
+  width: 100%;
+  max-width: 480px;
 }
 
 .login-form {
   width: 100%;
-  max-width: 420px;
   background-color: var(--white);
   padding: 40px;
-  border-radius: 12px;
-  border: 2px solid var(--border-color);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================
+   LOGO Y MARCA
+===================== */
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.login-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.login-brand h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--dark);
+  letter-spacing: -1px;
 }
 
 .login-form h2 {
@@ -332,33 +271,25 @@ body, html {
   transform: translateY(-2px);
 }
 
-
-
 /* =====================
    RESPONSIVE
 ===================== */
 @media (max-width: 768px) {
   .login-container {
-    flex-direction: column;
+    padding: 16px;
   }
 
-  .login-info {
-    min-height: 300px;
-    padding: 30px;
+  .login-form {
+    padding: 30px 24px;
   }
 
-  .login-form-wrapper {
-    flex: 1;
-    padding: 30px 20px;
+  .login-logo {
+    width: 90px;
+    height: 90px;
   }
 
-  .clinic-logo {
-    width: 100px;
-    height: 100px;
-  }
-
-  .login-info h1 {
-    font-size: 2.2rem;
+  .login-brand h1 {
+    font-size: 1.8rem;
   }
 
   .login-form h2 {
@@ -367,16 +298,12 @@ body, html {
 }
 
 @media (max-width: 480px) {
-  .login-form-wrapper {
-    padding: 20px;
-  }
-
   .login-form {
-    max-width: 100%;
+    padding: 24px 20px;
   }
 
   .login-form h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .form-options {
@@ -385,3 +312,4 @@ body, html {
     align-items: flex-start;
   }
 }
+
