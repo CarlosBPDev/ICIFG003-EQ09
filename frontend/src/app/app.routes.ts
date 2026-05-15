@@ -56,9 +56,10 @@ export const routes: Routes = [
   },
   {
     path: 'servicios',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./features/servicios/pages/servicios.component').then(m => m.ServiciosComponent),
-    title: 'Nuestros Servicios — OdontoCare'
+    title: 'Gestión de Servicios'
   },
   {
     path: '**',

@@ -1,56 +1,149 @@
 <div class="page-container">
   <div class="container">
-    <div class="page-header text-center mb-5">
-      <h1 class="page-title justify-content-center">
-        <i class="bi bi- briefcase-fill" style="color: var(--primary);"></i>
-        Nuestros Servicios Odontológicos
-      </h1>
-      <p class="page-subtitle">
-        Ofrecemos una amplia gama de tratamientos con la última tecnología y los mejores profesionales.
-      </p>
+
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div>
+        <h1 class="page-title">
+          <i class="bi bi-briefcase-fill" style="color: var(--primary);"></i>
+          Gestión de Servicios
+        </h1>
+        <p class="page-subtitle">Administre los servicios odontológicos de la clínica</p>
+      </div>
+      @if (!showForm()) {
+        <button class="btn btn-premium btn-premium-primary" (click)="abrirFormulario()">
+          <i class="bi bi-plus-lg"></i> Nuevo Servicio
+        </button>
+      }
     </div>
 
-    @if (isLoading()) {
-      <div class="row g-4">
-        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
-          <div class="col-md-4">
-            <div class="skeleton" style="height: 250px;"></div>
-          </div>
-        }
-      </div>
-    } @else {
-      <div class="row g-4">
-        @for (servicio of servicios(); track servicio.id) {
-          <div class="col-md-4">
-            <div class="card-inicio-style h-100 d-flex flex-column">
-              <div class="mb-3">
-                <h3 class="h5 mb-2" style="color: var(--primary); font-weight: 700;">{{ servicio.nombre }}</h3>
-                <p class="text-muted small mb-3">{{ servicio.descripcion }}</p>
+    <!-- Formulario -->
+    @if (showForm()) {
+      <div class="card-premium mb-4">
+        <div class="card-header">
+          <i class="bi bi-pencil-square me-2"></i>
+          {{ editingId() ? 'Editar Servicio' : 'Nuevo Servicio' }}
+        </div>
+        <div class="card-body">
+          <form [formGroup]="servicioForm" (ngSubmit)="guardar()">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label-premium" for="nombre">Nombre del Servicio *</label>
+                <input id="nombre" type="text" class="form-control form-control-premium"
+                       formControlName="nombre" placeholder="Ej: Limpieza Dental">
+                @if (servicioForm.get('nombre')?.invalid && servicioForm.get('nombre')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El nombre es obligatorio (2-100 caracteres)
+                  </div>
+                }
               </div>
-              
-              <div class="mt-auto">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <span class="badge-premium badge-activo">
-                    <i class="bi bi-clock"></i> {{ servicio.duracionMinutos }} min
-                  </span>
-                  <span class="h6 mb-0" style="color: var(--neutral-900); font-weight: 700;">
-                    ${{ servicio.precio | number:'1.0-0' }}
-                  </span>
-                </div>
-                <button class="btn-premium btn-premium-primary w-100 justify-content-center" routerLink="/citas">
-                  Reservar Hora
-                </button>
+              <div class="col-md-3">
+                <label class="form-label-premium" for="duracionMinutos">Duración (minutos) *</label>
+                <input id="duracionMinutos" type="number" class="form-control form-control-premium"
+                       formControlName="duracionMinutos" placeholder="Ej: 30" min="15">
+                @if (servicioForm.get('duracionMinutos')?.invalid && servicioForm.get('duracionMinutos')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> Mínimo 15 minutos
+                  </div>
+                }
+              </div>
+              <div class="col-md-3">
+                <label class="form-label-premium" for="precio">Precio ($) *</label>
+                <input id="precio" type="number" class="form-control form-control-premium"
+                       formControlName="precio" placeholder="Ej: 25000" min="0">
+                @if (servicioForm.get('precio')?.invalid && servicioForm.get('precio')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> El precio no puede ser negativo
+                  </div>
+                }
+              </div>
+              <div class="col-md-12">
+                <label class="form-label-premium" for="descripcion">Descripción</label>
+                <input id="descripcion" type="text" class="form-control form-control-premium"
+                       formControlName="descripcion" placeholder="Ej: Limpieza profesional y pulido dental">
               </div>
             </div>
-          </div>
-        }
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-premium btn-premium-success" [disabled]="isSaving()">
+                @if (isSaving()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span> Guardando...
+                } @else {
+                  <i class="bi bi-check-lg me-1"></i> {{ editingId() ? 'Actualizar' : 'Guardar' }}
+                }
+              </button>
+              <button type="button" class="btn btn-premium btn-premium-outline" (click)="cerrarFormulario()">
+                <i class="bi bi-x-lg me-1"></i> Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     }
 
-    <div class="text-center mt-5">
-      <button class="btn-premium btn-premium-outline" routerLink="/">
-        <i class="bi bi-arrow-left"></i> Volver al Inicio
-      </button>
+    <!-- Tabla -->
+    <div class="card-premium">
+      <div class="card-body p-0">
+        @if (isLoading()) {
+          <div class="p-4">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="skeleton skeleton-line mb-3"></div>
+            }
+          </div>
+        } @else if (servicios().length === 0) {
+          <div class="text-center p-5">
+            <i class="bi bi-briefcase" style="font-size: 3rem; color: var(--neutral-300);"></i>
+            <p class="mt-2" style="color: var(--neutral-500);">No hay servicios registrados</p>
+            <button class="btn btn-premium btn-premium-primary btn-sm" (click)="abrirFormulario()">
+              <i class="bi bi-plus-lg me-1"></i> Registrar Primer Servicio
+            </button>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Duración</th>
+                  <th>Precio</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (servicio of servicios(); track servicio.id) {
+                  <tr>
+                    <td><strong>#{{ servicio.id }}</strong></td>
+                    <td>
+                      <span style="font-weight: 600; color: var(--primary);">{{ servicio.nombre }}</span>
+                    </td>
+                    <td>{{ servicio.descripcion || '—' }}</td>
+                    <td>
+                      <span class="badge-premium badge-activo">
+                        <i class="bi bi-clock"></i> {{ servicio.duracionMinutos }} min
+                      </span>
+                    </td>
+                    <td><strong>${{ servicio.precio }}</strong></td>
+                    <td>
+                      <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-premium btn-premium-outline"
+                                (click)="abrirFormulario(servicio)" title="Editar">
+                          <i class="bi bi-pencil me-1"></i> Editar
+                        </button>
+                        <button class="btn btn-sm btn-premium btn-premium-danger"
+                                (click)="eliminar(servicio)" title="Eliminar">
+                          <i class="bi bi-trash me-1"></i> Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
     </div>
+
   </div>
 </div>

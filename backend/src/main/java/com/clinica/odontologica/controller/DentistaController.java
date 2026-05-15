@@ -37,21 +37,13 @@ public class DentistaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Dentista> actualizar(@PathVariable Long id, @Valid @RequestBody Dentista dentista) {
-        try {
-            Dentista dentistaActualizado = dentistaService.actualizar(id, dentista);
-            return ResponseEntity.ok(dentistaActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Dentista dentistaActualizado = dentistaService.actualizar(id, dentista);
+        return ResponseEntity.ok(dentistaActualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        try {
-            dentistaService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        dentistaService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -37,21 +37,13 @@ public class PacienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Paciente> actualizar(@PathVariable Long id, @Valid @RequestBody Paciente paciente) {
-        try {
-            Paciente pacienteActualizado = pacienteService.actualizar(id, paciente);
-            return ResponseEntity.ok(pacienteActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Paciente pacienteActualizado = pacienteService.actualizar(id, paciente);
+        return ResponseEntity.ok(pacienteActualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        try {
-            pacienteService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        pacienteService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

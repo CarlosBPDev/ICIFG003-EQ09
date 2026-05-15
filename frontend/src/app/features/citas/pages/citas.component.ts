@@ -1,17 +1,19 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ClinicaService } from '../../../core/services/clinica.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import {
   CitaResponse,
   OdontologoResponse,
-  PacienteResponse
+  PacienteResponse,
+  ServicioResponse
 } from '../../../shared/models/models';
 
 @Component({
   selector: 'app-citas',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './citas.component.html'
 })
 export class CitasComponent implements OnInit {
@@ -26,6 +28,7 @@ export class CitasComponent implements OnInit {
   readonly citas = signal<CitaResponse[]>([]);
   readonly pacientes = signal<PacienteResponse[]>([]);
   readonly odontologos = signal<OdontologoResponse[]>([]);
+  readonly servicios = signal<ServicioResponse[]>([]);
 
   readonly horasDisponibles = signal<string[]>([]);
   readonly horaSeleccionada = signal<string | null>(null);
@@ -52,6 +55,7 @@ export class CitasComponent implements OnInit {
   readonly citaForm: FormGroup = this.fb.group({
     pacienteId: [null as number | null, [Validators.required]],
     odontologoId: [null as number | null, [Validators.required]],
+    servicioId: [null as number | null, [Validators.required]],
     fecha: ['', [Validators.required]]
   });
 
@@ -125,11 +129,12 @@ export class CitasComponent implements OnInit {
 
     const pacienteId = Number(this.citaForm.get('pacienteId')?.value);
     const odontologoId = Number(this.citaForm.get('odontologoId')?.value);
+    const servicioId = Number(this.citaForm.get('servicioId')?.value);
 
     const request = {
       paciente: { id: pacienteId },
       dentista: { id: odontologoId },
-      servicio: { id: 1 },
+      servicio: { id: servicioId },
       fecha: this.citaForm.get('fecha')?.value,
       hora: hora
     };
@@ -161,6 +166,17 @@ export class CitasComponent implements OnInit {
     });
   }
 
+  eliminarCita(cita: CitaResponse): void {
+    if (!confirm(`¿Está seguro de eliminar permanentemente la cita #${cita.id}?`)) return;
+
+    this.clinicaService.eliminarCita(cita.id).subscribe({
+      next: () => {
+        this.notificationService.success('Cita Eliminada', `La cita #${cita.id} fue eliminada permanentemente`);
+        this._cargarCitas();
+      }
+    });
+  }
+
   // ============================================================
   // Carga de datos
   // ============================================================
@@ -176,6 +192,11 @@ export class CitasComponent implements OnInit {
     this.clinicaService.getOdontologos().subscribe({
       next: (data) => this.odontologos.set(data),
       error: () => this.odontologos.set([])
+    });
+
+    this.clinicaService.getServicios().subscribe({
+      next: (data) => this.servicios.set(data),
+      error: () => this.servicios.set([])
     });
 
     this._cargarCitas();

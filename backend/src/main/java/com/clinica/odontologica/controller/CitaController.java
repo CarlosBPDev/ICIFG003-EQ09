@@ -21,7 +21,7 @@ public class CitaController {
     private final CitaService citaService;
 
     // ==========================================
-    // ENDPOINTS BÁSICOS
+    // ENDPOINTS CRUD BÁSICOS
     // ==========================================
 
     @GetMapping
@@ -41,6 +41,18 @@ public class CitaController {
         return ResponseEntity.ok(citaService.buscarPorPaciente(pacienteId));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Cita> actualizar(@PathVariable Long id, @Valid @RequestBody Cita cita) {
+        Cita citaActualizada = citaService.actualizar(id, cita);
+        return ResponseEntity.ok(citaActualizada);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        citaService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
+
     // ==========================================
     // FUNCIONALIDADES DE NEGOCIO
     // ==========================================
@@ -51,12 +63,8 @@ public class CitaController {
      */
     @PostMapping("/reservar")
     public ResponseEntity<?> reservarHora(@Valid @RequestBody Cita cita) {
-        try {
-            Cita citaReservada = citaService.reservarHora(cita);
-            return ResponseEntity.status(HttpStatus.CREATED).body(citaReservada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
+        Cita citaReservada = citaService.reservarHora(cita);
+        return ResponseEntity.status(HttpStatus.CREATED).body(citaReservada);
     }
 
     /**
@@ -65,12 +73,8 @@ public class CitaController {
      */
     @PutMapping("/{id}/cancelar")
     public ResponseEntity<?> cancelarHora(@PathVariable Long id) {
-        try {
-            Cita citaCancelada = citaService.cancelarHora(id);
-            return ResponseEntity.ok(citaCancelada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
+        Cita citaCancelada = citaService.cancelarHora(id);
+        return ResponseEntity.ok(citaCancelada);
     }
 
     /**

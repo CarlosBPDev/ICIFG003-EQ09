@@ -2,13 +2,16 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { NotificationService } from '../services/notification.service';
-import { ErrorResponse } from '../../shared/models/models';
 
 /**
  * Functional HTTP Interceptor (HttpInterceptorFn).
  *
- * Captura errores HTTP del backend (400, 404, 409, 422)
- * y lee el ErrorResponseDTO para mostrar un toast con el mensaje.
+ * Captura errores HTTP del backend y muestra un toast con el mensaje.
+ * Compatible con el formato de GlobalExceptionHandler del backend:
+ * { status, error, mensaje, timestamp }
+ *
+ * También maneja el formato estándar de Spring Boot:
+ * { status, error, message, path, timestamp }
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const notificationService = inject(NotificationService);
@@ -18,9 +21,17 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       let mensaje = 'Ha ocurrido un error inesperado';
 
       if (error.error && typeof error.error === 'object') {
-        // Lee el ErrorResponseDTO del backend
-        const errorBody = error.error as ErrorResponse;
-        mensaje = errorBody.mensaje || errorBody.error || mensaje;
+        const errorBody = error.error;
+        // Nuestro formato personalizado: { mensaje, error }
+        // Formato Spring Boot estándar: { message, error }
+        mensaje = errorBody.mensaje || errorBody.message || errorBody.error || mensaje;
+
+        // Si hay errores de validación en un array (Spring Boot default)
+        if (errorBody.errors && Array.isArray(errorBody.errors)) {
+          mensaje = errorBody.errors
+            .map((e: any) => e.defaultMessage || e.message || e)
+            .join('; ');
+        }
       } else if (typeof error.error === 'string') {
         mensaje = error.error;
       }

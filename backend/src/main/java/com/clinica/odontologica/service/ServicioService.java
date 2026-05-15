@@ -23,12 +23,22 @@ public class ServicioService {
     }
 
     public Servicio guardar(Servicio servicio) {
+        // Verificar nombre duplicado antes de guardar
+        if (servicioRepository.existsByNombre(servicio.getNombre())) {
+            throw new RuntimeException("Ya existe un servicio con el nombre: " + servicio.getNombre());
+        }
         return servicioRepository.save(servicio);
     }
 
     public Servicio actualizar(Long id, Servicio servicioActualizado) {
         return servicioRepository.findById(id)
                 .map(servicio -> {
+                    // Verificar nombre duplicado solo si cambió
+                    if (!servicio.getNombre().equals(servicioActualizado.getNombre())) {
+                        if (servicioRepository.existsByNombre(servicioActualizado.getNombre())) {
+                            throw new RuntimeException("Ya existe otro servicio con el nombre: " + servicioActualizado.getNombre());
+                        }
+                    }
                     servicio.setNombre(servicioActualizado.getNombre());
                     servicio.setDescripcion(servicioActualizado.getDescripcion());
                     servicio.setDuracionMinutos(servicioActualizado.getDuracionMinutos());

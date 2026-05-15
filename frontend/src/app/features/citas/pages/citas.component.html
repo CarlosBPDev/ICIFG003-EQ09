@@ -33,7 +33,7 @@
             <div class="row g-3">
 
               <!-- Paciente -->
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <label class="form-label-premium" for="pacienteId">
                   <i class="bi bi-person me-1"></i> Paciente *
                 </label>
@@ -54,7 +54,7 @@
               </div>
 
               <!-- Odontólogo -->
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <label class="form-label-premium" for="odontologoId">
                   <i class="bi bi-person-badge me-1"></i> Odontólogo *
                 </label>
@@ -75,8 +75,29 @@
                 }
               </div>
 
+              <!-- Servicio -->
+              <div class="col-md-6">
+                <label class="form-label-premium" for="servicioId">
+                  <i class="bi bi-briefcase me-1"></i> Servicio *
+                </label>
+                <select id="servicioId" class="form-control form-control-premium"
+                        formControlName="servicioId">
+                  <option [ngValue]="null" disabled>Seleccione un servicio</option>
+                  @for (servicio of servicios(); track servicio.id) {
+                    <option [ngValue]="servicio.id">
+                      {{ servicio.nombre }} — {{ servicio.duracionMinutos }} min — ${{ servicio.precio }}
+                    </option>
+                  }
+                </select>
+                @if (citaForm.get('servicioId')?.invalid && citaForm.get('servicioId')?.touched) {
+                  <div class="validation-error">
+                    <i class="bi bi-exclamation-circle"></i> Debe seleccionar un servicio
+                  </div>
+                }
+              </div>
+
               <!-- Fecha -->
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <label class="form-label-premium" for="fecha">
                   <i class="bi bi-calendar-date me-1"></i> Fecha *
                 </label>
@@ -94,7 +115,7 @@
             </div>
 
             <!-- ============================================================
-                 Horas Disponibles (con @defer)
+                 Horas Disponibles
                  ============================================================ -->
             @if (citaForm.get('odontologoId')?.value && citaForm.get('fecha')?.value) {
               <div class="mt-4">
@@ -172,7 +193,7 @@
     }
 
     <!-- ============================================================
-         Lista de Citas (con @defer)
+         Lista de Citas
          ============================================================ -->
     <div class="card-premium">
       <div class="card-body p-0">
@@ -195,7 +216,7 @@
                     <th>Hora</th>
                     <th>Paciente</th>
                     <th>Odontólogo</th>
-                    <th>Especialidad</th>
+                    <th>Servicio</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                   </tr>
@@ -216,7 +237,7 @@
                       <td>{{ cita.dentista.nombre }} {{ cita.dentista.apellido }}</td>
                       <td>
                         <span style="background: var(--primary-light); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: var(--font-size-xs); font-weight: 600;">
-                          {{ cita.dentista.especialidad }}
+                          {{ cita.servicio.nombre }}
                         </span>
                       </td>
                       <td>
@@ -235,12 +256,20 @@
                         }
                       </td>
                       <td>
-                        @if (cita.estado === 'RESERVADA') {
-                          <button class="btn btn-sm btn-premium btn-premium-danger"
-                                  (click)="cancelarCita(cita)" title="Cancelar Cita">
-                            <i class="bi bi-calendar-x"></i>
-                          </button>
-                        }
+                        <div class="d-flex gap-1">
+                          @if (cita.estado === 'RESERVADA') {
+                            <button class="btn btn-sm btn-premium btn-premium-danger"
+                                    (click)="cancelarCita(cita)" title="Cancelar Cita">
+                              <i class="bi bi-calendar-x"></i>
+                            </button>
+                          }
+                          @if (cita.estado === 'CANCELADA') {
+                            <button class="btn btn-sm btn-premium btn-premium-danger"
+                                    (click)="eliminarCita(cita)" title="Eliminar Cita">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          }
+                        </div>
                       </td>
                     </tr>
                   }

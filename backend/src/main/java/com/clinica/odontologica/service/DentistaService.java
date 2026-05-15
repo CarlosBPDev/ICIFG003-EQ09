@@ -27,12 +27,22 @@ public class DentistaService {
     }
 
     public Dentista guardar(Dentista dentista) {
+        // Verificar RUT duplicado antes de guardar
+        dentistaRepository.findByRut(dentista.getRut()).ifPresent(existente -> {
+            throw new RuntimeException("Ya existe un dentista con el RUT: " + dentista.getRut());
+        });
         return dentistaRepository.save(dentista);
     }
 
     public Dentista actualizar(Long id, Dentista dentistaActualizado) {
         return dentistaRepository.findById(id)
                 .map(dentista -> {
+                    // Verificar RUT duplicado solo si cambió
+                    if (!dentista.getRut().equals(dentistaActualizado.getRut())) {
+                        dentistaRepository.findByRut(dentistaActualizado.getRut()).ifPresent(existente -> {
+                            throw new RuntimeException("Ya existe otro dentista con el RUT: " + dentistaActualizado.getRut());
+                        });
+                    }
                     dentista.setRut(dentistaActualizado.getRut());
                     dentista.setNombre(dentistaActualizado.getNombre());
                     dentista.setApellido(dentistaActualizado.getApellido());

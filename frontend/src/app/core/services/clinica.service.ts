@@ -9,6 +9,7 @@ import {
   OdontologoResponse,
   CitaRequest,
   CitaResponse,
+  ServicioRequest,
   ServicioResponse
 } from '../../shared/models/models';
 import { environment } from '../../../environments/environment';
@@ -89,6 +90,22 @@ export class ClinicaService {
     return this.http.get<ServicioResponse[]>(`${this.apiUrl}/servicios`);
   }
 
+  getServicio(id: number): Observable<ServicioResponse> {
+    return this.http.get<ServicioResponse>(`${this.apiUrl}/servicios/${id}`);
+  }
+
+  crearServicio(servicio: ServicioRequest): Observable<ServicioResponse> {
+    return this.http.post<ServicioResponse>(`${this.apiUrl}/servicios`, servicio);
+  }
+
+  actualizarServicio(id: number, servicio: ServicioRequest): Observable<ServicioResponse> {
+    return this.http.put<ServicioResponse>(`${this.apiUrl}/servicios/${id}`, servicio);
+  }
+
+  eliminarServicio(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/servicios/${id}`);
+  }
+
   // ============================================================
   // CITAS  →  /api/citas
   // ============================================================
@@ -111,6 +128,14 @@ export class ClinicaService {
    */
   cancelarCita(id: number): Observable<CitaResponse> {
     return this.http.put<CitaResponse>(`${this.apiUrl}/citas/${id}/cancelar`, {});
+  }
+
+  /**
+   * Eliminar una cita.
+   * Backend endpoint: DELETE /api/citas/{id}
+   */
+  eliminarCita(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/citas/${id}`);
   }
 
   /**

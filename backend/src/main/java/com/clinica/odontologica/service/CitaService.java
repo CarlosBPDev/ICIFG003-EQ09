@@ -39,6 +39,37 @@ public class CitaService {
         return citaRepository.findByDentistaId(dentistaId);
     }
 
+    /**
+     * Actualizar una cita existente (cambiar notas, estado, etc.)
+     */
+    @Transactional
+    public Cita actualizar(Long id, Cita citaActualizada) {
+        return citaRepository.findById(id)
+                .map(cita -> {
+                    cita.setPaciente(citaActualizada.getPaciente());
+                    cita.setDentista(citaActualizada.getDentista());
+                    cita.setServicio(citaActualizada.getServicio());
+                    cita.setFecha(citaActualizada.getFecha());
+                    cita.setHora(citaActualizada.getHora());
+                    cita.setNotas(citaActualizada.getNotas());
+                    if (citaActualizada.getEstado() != null) {
+                        cita.setEstado(citaActualizada.getEstado());
+                    }
+                    return citaRepository.save(cita);
+                })
+                .orElseThrow(() -> new RuntimeException("Cita no encontrada con id: " + id));
+    }
+
+    /**
+     * Eliminar una cita.
+     */
+    public void eliminar(Long id) {
+        if (!citaRepository.existsById(id)) {
+            throw new RuntimeException("Cita no encontrada con id: " + id);
+        }
+        citaRepository.deleteById(id);
+    }
+
     // ==========================================
     // FUNCIONALIDADES DE NEGOCIO
     // ==========================================

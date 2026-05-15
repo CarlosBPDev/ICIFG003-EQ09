@@ -37,21 +37,13 @@ public class ServicioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Servicio> actualizar(@PathVariable Long id, @Valid @RequestBody Servicio servicio) {
-        try {
-            Servicio servicioActualizado = servicioService.actualizar(id, servicio);
-            return ResponseEntity.ok(servicioActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Servicio servicioActualizado = servicioService.actualizar(id, servicio);
+        return ResponseEntity.ok(servicioActualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        try {
-            servicioService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        servicioService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

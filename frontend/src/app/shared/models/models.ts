@@ -54,6 +54,25 @@ export interface OdontologoResponse {
 }
 
 // ============================================================
+// Servicio (Backend: Servicio.java)
+// ============================================================
+
+export interface ServicioRequest {
+  nombre: string;
+  descripcion?: string;
+  duracionMinutos: number;
+  precio: number;
+}
+
+export interface ServicioResponse {
+  id: number;
+  nombre: string;
+  descripcion: string | null;
+  precio: number;
+  duracionMinutos: number;
+}
+
+// ============================================================
 // Cita (Backend: Cita.java)
 // El backend espera el objeto Cita con entidades anidadas
 // ============================================================
@@ -76,18 +95,6 @@ export interface CitaResponse {
   paciente: PacienteResponse;
   dentista: OdontologoResponse;
   servicio: ServicioResponse;
-}
-
-// ============================================================
-// Servicio (Backend: Servicio.java)
-// ============================================================
-
-export interface ServicioResponse {
-  id: number;
-  nombre: string;
-  descripcion: string | null;
-  precio: number;
-  duracionMinutos: number;
 }
 
 // ============================================================
