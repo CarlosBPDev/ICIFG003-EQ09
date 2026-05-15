@@ -53,6 +53,18 @@ public class CitaController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/paciente/{pacienteId}")
+    public ResponseEntity<?> eliminarCitasPorPaciente(@PathVariable Long pacienteId) {
+        citaService.eliminarCitasPorPaciente(pacienteId);
+        return ResponseEntity.ok(Map.of("mensaje", "Todas las citas del paciente han sido eliminadas"));
+    }
+
+    @DeleteMapping("/dentista/{dentistaId}")
+    public ResponseEntity<?> eliminarCitasPorDentista(@PathVariable Long dentistaId) {
+        citaService.eliminarCitasPorDentista(dentistaId);
+        return ResponseEntity.ok(Map.of("mensaje", "Todas las citas del dentista han sido eliminadas"));
+    }
+
     // ==========================================
     // FUNCIONALIDADES DE NEGOCIO
     // ==========================================

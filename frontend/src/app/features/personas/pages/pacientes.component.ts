@@ -110,6 +110,10 @@ export class PacientesComponent implements OnInit {
       next: () => {
         this.notificationService.success('Paciente Eliminado', `${paciente.nombre} ${paciente.apellido} fue eliminado`);
         this._cargarPacientes();
+      },
+      error: (error) => {
+        const mensaje = error?.error?.mensaje || 'No se pudo eliminar el paciente. Intente nuevamente.';
+        this.notificationService.error('Error al eliminar', mensaje);
       }
     });
   }

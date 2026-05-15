@@ -2,6 +2,7 @@ package com.clinica.odontologica.service;
 
 import com.clinica.odontologica.model.Dentista;
 import com.clinica.odontologica.repository.DentistaRepository;
+import com.clinica.odontologica.repository.CitaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class DentistaService {
 
     private final DentistaRepository dentistaRepository;
+    private final CitaRepository citaRepository;
 
     public List<Dentista> listarTodos() {
         return dentistaRepository.findAll();
@@ -58,6 +60,12 @@ public class DentistaService {
         if (!dentistaRepository.existsById(id)) {
             throw new RuntimeException("Dentista no encontrado con id: " + id);
         }
+        
+        // Validar que no haya citas asociadas
+        if (!citaRepository.findByDentistaId(id).isEmpty()) {
+            throw new RuntimeException("No se puede eliminar el dentista porque tiene citas asociadas. Por favor, cancele o elimine las citas primero.");
+        }
+        
         dentistaRepository.deleteById(id);
     }
 }

@@ -55,11 +55,13 @@ VALUES ('Pedro', 'Rodriguez', '15000002-3', 'pedro.rodriguez@email.com', '569123
 -- ==========================================
 -- CITAS
 -- ==========================================
-INSERT INTO "citas" ("paciente_id", "dentista_id", "servicio_id", "fecha", "hora", "estado", "notas")
-VALUES (1, 1, 1, CURDATE(), '09:00:00', 'RESERVADA', 'Primera cita - Consulta inicial');
-
-INSERT INTO "citas" ("paciente_id", "dentista_id", "servicio_id", "fecha", "hora", "estado", "notas")
-VALUES (2, 2, 3, CURDATE(), '10:30:00', 'RESERVADA', 'Seguimiento de ortodoncia');
-
-INSERT INTO "citas" ("paciente_id", "dentista_id", "servicio_id", "fecha", "hora", "estado", "notas")
-VALUES (3, 1, 2, CURDATE(), '14:00:00', 'RESERVADA', 'Limpieza dental');
+-- Las citas iniciales están comentadas para permitir la eliminación de pacientes y dentistas
+-- Si deseas agregar datos de prueba, descomenta las líneas siguientes:
+-- INSERT INTO "citas" ("paciente_id", "dentista_id", "servicio_id", "fecha", "hora", "estado", "notas")
+-- VALUES (1, 1, 1, CURDATE(), '09:00:00', 'RESERVADA', 'Primera cita - Consulta inicial');
+-- 
+-- INSERT INTO "citas" ("paciente_id", "dentista_id", "servicio_id", "fecha", "hora", "estado", "notas")
+-- VALUES (2, 2, 3, CURDATE(), '10:30:00', 'RESERVADA', 'Seguimiento de ortodoncia');
+-- 
+-- INSERT INTO "citas" ("paciente_id", "dentista_id", "servicio_id", "fecha", "hora", "estado", "notas")
+-- VALUES (3, 1, 2, CURDATE(), '14:00:00', 'RESERVADA', 'Limpieza dental');

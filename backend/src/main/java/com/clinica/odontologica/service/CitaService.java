@@ -70,6 +70,26 @@ public class CitaService {
         citaRepository.deleteById(id);
     }
 
+    /**
+     * Eliminar todas las citas de un paciente.
+     */
+    public void eliminarCitasPorPaciente(Long pacienteId) {
+        List<Cita> citas = citaRepository.findByPacienteId(pacienteId);
+        if (!citas.isEmpty()) {
+            citaRepository.deleteAll(citas);
+        }
+    }
+
+    /**
+     * Eliminar todas las citas de un dentista.
+     */
+    public void eliminarCitasPorDentista(Long dentistaId) {
+        List<Cita> citas = citaRepository.findByDentistaId(dentistaId);
+        if (!citas.isEmpty()) {
+            citaRepository.deleteAll(citas);
+        }
+    }
+
     // ==========================================
     // FUNCIONALIDADES DE NEGOCIO
     // ==========================================

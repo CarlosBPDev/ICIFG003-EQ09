@@ -108,6 +108,10 @@ export class OdontologosComponent implements OnInit {
       next: () => {
         this.notificationService.success('Odontólogo Eliminado', `${odontologo.nombre} ${odontologo.apellido} fue eliminado`);
         this._cargarOdontologos();
+      },
+      error: (error) => {
+        const mensaje = error?.error?.mensaje || 'No se pudo eliminar el odontólogo. Intente nuevamente.';
+        this.notificationService.error('Error al eliminar', mensaje);
       }
     });
   }
